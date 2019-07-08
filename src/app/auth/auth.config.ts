@@ -11,10 +11,10 @@ interface AuthConfig {
 };
 
 export const AUTH_CONFIG: AuthConfig = {
-  CLIENT_ID: 'dWZDDZZAZBNYoqB1atRScQviA9VD2t1w',
-  CLIENT_DOMAIN: 'actuarialgames.auth0.com', // e.g., you.auth0.com
-  AUDIENCE: 'https://actuarialgames.auth0.com/api/v2/', // e.g., http://localhost:8083/api/
+  CLIENT_ID: 'O4WkC6dEBPid3R06GZyeoJL7M6ZPaK4F',
+  CLIENT_DOMAIN: 'fgt.auth0.com', // e.g., you.auth0.com
+  AUDIENCE: 'https://fgt.auth0.com/api/v2/', // e.g., http://localhost:8083/api/
   REDIRECT: `${ENV.BASE_URI}/callback`,
   SCOPE: 'openid profile',
-  NAMESPACE: 'https://test-heroku-jmhans33439.codeanyapp.com/roles'
+  NAMESPACE: 'https://fallgolftrip.com/roles'
 };
