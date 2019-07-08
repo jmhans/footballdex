@@ -2,9 +2,9 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const golferSchema = new Schema({
-    nickname: {type: string, required: true} 
+    nickname: {type: String, required: true} 
 });
 
-module.exports = mongoose.model( golferSchema);
+module.exports = mongoose.model( 'Golfer', golferSchema);
 
 

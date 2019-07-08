@@ -9,6 +9,8 @@ const jwt = require('express-jwt');
 const jwks = require('jwks-rsa');
 const mlbGame = require('./../models/mlbGame');
 const PropBetsController = require('./../controllers/propBets.controller');
+const golfersController = require('./../controllers/golfers.controller');
+
 
 
 /*
@@ -65,6 +67,9 @@ module.exports = function(app, config) {
     
   app.get('/api/betSummary',PropBetsController._get);
   
+  app.get('/api/golfers', golfersController._get);  
+  app.post('/api/golfers/new', golfersController._post);
+  app.put('/api/golfers/:id', golfersController._put);
   
   
 
