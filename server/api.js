@@ -67,9 +67,15 @@ module.exports = function(app, config) {
     
   app.get('/api/betSummary',PropBetsController._get);
   
-  app.get('/api/golfers', golfersController._get);  
-  app.post('/api/golfers/new', golfersController._post);
-  app.put('/api/golfers/:id', golfersController._put);
+  
+  
+    
+  var api = require('../routes/api.route');
+  app.use('/api', api);
+  
+//   app.get('/api/golfers', golfersController._get);  
+//   app.post('/api/golfers/new', golfersController._post);
+//   app.put('/api/golfers/:id', golfersController._put);
   
   
 

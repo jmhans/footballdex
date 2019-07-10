@@ -1,0 +1,60 @@
+<!-- src/app/pages/admin/update-team/update-team.component.html -->
+<h1 class="text-center">{{ pageTitle }}</h1>
+
+ <ng-template [ngIf]="utils.isLoaded(loading)">
+  <div *ngIf="golferList" class="card">
+    <div class="card-header">
+      <ul class="nav nav-tabs card-header-tabs">
+        <li class="nav-item">
+          <a
+            class="nav-link"
+            [routerLink]="[]"
+            [queryParams]="{ tab: 'list' }"
+            [ngClass]="{ 'active': utils.tabIs(tab, 'list') }">List</a>
+        </li>
+        <li class="nav-item">
+          <a
+            class="nav-link"
+            [routerLink]="[]"
+            [queryParams]="{ tab: 'add' }"
+            [ngClass]="{ 'active': utils.tabIs(tab, 'add') }">Add</a>
+        </li>
+<!--         <li class="nav-item">
+          <a
+            class="nav-link"
+            [routerLink]="[]"
+            [queryParams]="{ tab: 'delete' }"
+            [ngClass]="{ 'active': utils.tabIs(tab, 'delete') }">Delete</a>
+        </li> -->
+      </ul>
+    </div>
+
+  <ng-template [ngIf]="golferList.length && utils.tabIs(tab, 'list')">
+
+    <!-- Teams listing -->
+    <section class="list-group">
+      <a *ngFor="let golfer of fs.orderByDate(filteredGolfers, 'location')" [routerLink]="['/golfer', golfer._id]" class="list-group-item list-group-item-action flex-column align-items-start">
+        <div class="d-flex w-100 justify-content-between">
+          <h5 class="mb-1">{{golfer.nickname}}</h5>
+          <small >{{golfer | json}} {{ golfer.handicap }}</small>
+        </div>
+      </a>
+    </section>
+  </ng-template>
+    
+   </div>    
+    
+      <!-- Add form -->
+      <app-data-form
+        *ngIf="utils.tabIs(tab, 'add')"
+        [golfer]="golfer"></app-data-form>
+
+<!--   </div> -->
+    <!-- Error loading data -->
+  <p *ngIf="error" class="alert alert-danger">
+    <strong>Error:</strong> Golfer data could not be retrieved. View <a routerLink="/admin" class="alert-link">Admin Golfers</a>.
+  </p>
+  
+  
+  
+</ng-template>
