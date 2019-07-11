@@ -51,6 +51,8 @@ export class AuthService {
         window.location.hash = '';
         this._getProfile(authResult);
       } else if (err) {
+        this._clearRedirect();
+        this.router.navigate(['/']);
         console.error(`Error authenticating: ${err.error}`);
       }
       this.router.navigate(['/']);
@@ -63,6 +65,7 @@ export class AuthService {
     this._auth0.client.userInfo(authResult.accessToken, (err, profile) => {
       if (profile) {
         this._setSession(authResult, profile);
+        this._redirect();
       } else if (err) {
         console.warn(`Error retrieving profile: ${err.error}`);
       }
@@ -100,6 +103,7 @@ export class AuthService {
   logout() {
     // Remove data from localStorage
     this._clearExpiration();
+    this._clearRedirect();
     // End Auth0 authentication session
     this._auth0.logout({
       clientId: AUTH_CONFIG.CLIENT_ID,
@@ -121,6 +125,30 @@ export class AuthService {
         this._clearExpiration();
       }
     });
+  }
+  
+  
+  
+  private _redirect() {
+    // Redirect with or without 'tab' query parameter
+    // Note: does not support additional params besides 'tab'
+    const fullRedirect = decodeURI(localStorage.getItem('authRedirect') || '');
+    const redirectArr = fullRedirect.split('?tab=');
+    const navArr = [redirectArr[0] || '/'];
+    const tabObj = redirectArr[1] ? { queryParams: { tab: redirectArr[1] }} : null;
+
+    if (!tabObj) {
+      this.router.navigate(navArr);
+    } else {
+      this.router.navigate(navArr, tabObj);
+    }
+    // Redirection completed; clear redirect from storage
+    this._clearRedirect();
+  }
+
+  private _clearRedirect() {
+    // Remove redirect from localStorage
+    localStorage.removeItem('authRedirect');
   }
 
 }

@@ -1,5 +1,6 @@
 <!-- src/app/pages/event/event.component.html -->
 
+
 <ng-template [ngIf]="utils.isLoaded(loading)">
   <h1 class="text-center">{{ pageTitle }}</h1>
   <!-- Event -->
@@ -24,7 +25,7 @@
           </li>
         </ul>
       </div>
-      <div *ngIf="utils.tabis(tab, 'details')">
+      <div *ngIf="utils.tabIs(tab, 'details')">
         {{golfer | json}}
         {{golfer.nickname}} | {{golfer.handicap}}
       </div>
