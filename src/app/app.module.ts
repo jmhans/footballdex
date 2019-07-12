@@ -31,6 +31,12 @@ import { AdminComponent } from './pages/admin/admin.component';
 import { DataFormComponent } from './pages/admin/data-form/data-form.component';
 import { SubmittingComponent } from './core/forms/submitting/submitting.component';
 import { GolferComponent } from './pages/golfer/golfer.component';
+import { SubadminComponent } from './pages/admin/subadmin/subadmin.component';
+import { CourseFormComponent } from './pages/admin/course-form/course-form.component';
+import { RoundFormComponent } from './pages/admin/round-form/round-form.component';
+import { ScorecardFormComponent } from './pages/admin/scorecard-form/scorecard-form.component';
+import { GroupFormComponent } from './pages/admin/group-form/group-form.component';
+import { CreateRoundComponent } from './pages/admin/create-round/create-round.component';
 
 
 @NgModule({
@@ -43,7 +49,13 @@ import { GolferComponent } from './pages/golfer/golfer.component';
     AdminComponent,
     DataFormComponent,
     SubmittingComponent,
-    GolferComponent
+    GolferComponent,
+    SubadminComponent,
+    CourseFormComponent,
+    RoundFormComponent,
+    ScorecardFormComponent,
+    GroupFormComponent,
+    CreateRoundComponent
   ],
   imports: [
     BrowserModule,

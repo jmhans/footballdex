@@ -7,6 +7,8 @@ import { AdminGuard } from './auth/admin.guard';
 import { AdminComponent } from './pages/admin/admin.component';
 import { GolferComponent } from './pages/golfer/golfer.component';
 
+import { CreateRoundComponent } from './pages/admin/create-round/create-round.component';
+
 const routes: Routes = [
   {
     path: '',
@@ -17,7 +19,9 @@ const routes: Routes = [
     component: CallbackComponent
   }, 
   {path: 'admin', canActivate: [ AuthGuard, AdminGuard ], children: [ { path: '', component: AdminComponent }]}, 
-  {path: 'golfer', canActivate: [ AuthGuard ], children: [{ path: ':id', component: GolferComponent }]}
+  {path: 'golfer', canActivate: [ AuthGuard ], children: [{ path: ':id', component: GolferComponent }]},
+  {path: 'round', canActivate: [ AuthGuard], children: [{ path: 'new', component: CreateRoundComponent}]}
+  
   
 ];
 

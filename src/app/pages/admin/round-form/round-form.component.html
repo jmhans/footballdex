@@ -1,0 +1,75 @@
+<!-- src/app/pages/admin/game-form/game-form.component.html -->
+<form [formGroup]="dataForm" (ngSubmit)="onSubmit()">
+  
+    <div class="form-group">
+    <label for="date">Date</label>
+      <input
+            type="text"
+            class="form-control"
+            formControlName="date"
+            id="date"
+            required
+      >
+    <div
+      *ngIf="formErrors.date"
+      class="small text-danger formErrors"
+      [innerHTML]="formErrors.date">
+    </div>
+  </div>
+  <div class="form-group">
+    <label for="course">Course</label>
+      <input
+            type="text"
+            class="form-control"
+            formControlName="course"
+            id="course"
+            required
+      >
+    <div
+      *ngIf="formErrors.course"
+      class="small text-danger formErrors"
+      [innerHTML]="formErrors.course">
+    </div>
+  </div>
+  <div class="form-group">
+    <label for="description">Round Description</label>
+
+        <input
+      id="description"
+      type="text"
+      class="form-control"
+      formControlName="description"
+      required>
+    <div
+      *ngIf="formErrors.name"
+      class="small text-danger formErrors"
+      [innerHTML]="formErrors.description">
+    </div>
+  </div>
+
+  
+
+  <!-- Submit -->
+  <div class="form-group">
+    <button
+      type="submit"
+      class="btn btn-primary"
+      [attr.disabled]="dataForm.invalid || submitting ? true : null"
+      [innerText]="submitBtnText"></button>
+      <!-- https://github.com/angular/angular/issues/11271#issuecomment-289806196 -->
+    <app-submitting *ngIf="submitting"></app-submitting>
+    <a
+      *ngIf="!submitting"
+      class="btn btn-link"
+      (click)="resetForm()"
+      tabindex="0">Reset Form</a>
+
+    <!-- API submission error -->
+    <p *ngIf="error" class="mt-3 alert alert-danger">
+      <strong>Error:</strong> There was a problem submitting the information. Please try again.
+    </p>
+  </div>
+</form>
+
+
+

@@ -26,6 +26,9 @@ export class AdminComponent implements OnInit, OnDestroy {
   loggedIn: boolean;
   tabSub: Subscription;
   tab: string;
+  
+  availableModels: any[];
+  
 
   constructor(
     private title: Title,
@@ -37,6 +40,7 @@ export class AdminComponent implements OnInit, OnDestroy {
   ) { }
 
   ngOnInit() {
+   
     this.title.setTitle(this.pageTitle);
     this._getGolferList();
     this.loggedInSub = this.auth.loggedIn$.subscribe(

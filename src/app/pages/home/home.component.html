@@ -1,2 +1,7 @@
 <!-- src/app/pages/home/home.component.html -->
 <h1 class="text-center">{{ pageTitle }}</h1>
+      
+        <a
+          routerLink="/round/new"
+          routerLinkActive="active"
+          [routerLinkActiveOptions]="{ exact: true }">Create Round</a>

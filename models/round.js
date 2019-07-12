@@ -14,8 +14,9 @@ const groupSchema = new Schema({
 
 
 const scorecardSchema = new Schema({
-    golfer: {type: Schema.Types.ObjectId, ref: 'Golfer'}, 
-    holes: {type: [{number: Number, par: Number, score: Number, handicap: Number, handicap_strokes: Number }]}
+    golfer: {type: Schema.Types.ObjectId, ref: 'Golfer'},
+    handicap_strokes: {type: Number, required: false},
+    holes: {type: [{number: Number, par: Number, score: Number, handicap: Number, handicap_strokes: Number , tee: Object}]}
 })
 
 module.exports = {

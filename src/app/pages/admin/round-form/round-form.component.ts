@@ -1,68 +1,88 @@
 
 import { Component, OnInit, OnDestroy, Input } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, AbstractControl } from '@angular/forms';
-import { GolferModel, FormGolferModel } from './../../../core/models/golfer.model';
-import { DataFormService } from './data-form.service';
+import { RoundModel, FormRoundModel } from './../../../core/models/round.model';
 import { ApiService } from './../../../core/services/api.service';
 import { Subscription } from 'rxjs';
 import { Router } from '@angular/router';
 
 @Component({
-  selector: 'app-data-form',
-  templateUrl: './data-form.component.html',
-  styleUrls: ['./data-form.component.scss'], 
-  providers: [DataFormService]
+  selector: 'app-round-form',
+  templateUrl: './round-form.component.html',
+  styleUrls: ['./round-form.component.scss']
 })
-export class DataFormComponent implements OnInit, OnDestroy {
-  @Input() golfer: GolferModel;
-  @Input() instance: any;
-  
-  objFields: [string];
-  @Input() modelName: string;
+export class RoundFormComponent implements OnInit, OnDestroy {
+  @Input() round: RoundModel;
   
   isEdit: boolean;
   // FormBuilder form
-  golferForm: FormGroup;
+  dataForm: FormGroup;
   // Model storing initial form values
-  formGolfer: FormGolferModel;
+  formObj: FormRoundModel;
   // Form validation and disabled logic
-  formErrors: any;
+
   formChangeSub: Subscription;
   // Form submission
-  submitGolferObj: GolferModel;
-  submitGolferSub: Subscription;
+  submitObj: RoundModel;
+  submitSub: Subscription;
   error: boolean;
   submitting: boolean;
   submitBtnText: string;
   
+  
+  // Set up errors object
+  formErrors: any = {
+    description: '',
+    groups: '',
+    date: '', 
+    course: ''
+  }
+  
+  validationMessages: any = {
+      description: {
+        required: `Description is <strong>required</strong>.`
+      },
+      group: {
+        required: `Group is <strong>required</strong>.`
+      }, 
+      date: {
+        required: 'Date is <strong>required</strong>'
+      }, 
+      course: {
+        required: 'Course is <strong>required</strong>'
+      }
+    }
+  
+  
   constructor(
     private fb: FormBuilder,
     private api: ApiService,
-    public df: DataFormService,
     public router: Router
   ) { }
 
   ngOnInit() {
-    this.formErrors = this.df.formErrors;
-    this.isEdit = !!this.golfer;
-    this.submitBtnText = this.isEdit ? 'Update Golfer' : 'Create Golfer';
+    this.formErrors = this.formErrors;
+    this.isEdit = !!this.round;
+    this.submitBtnText = this.isEdit ? 'Update Data' : 'Create Data';
     // Set initial form data
-    this.formGolfer = this._setFormGolfer();
+    this.formObj = this._setFormObj();
     // Use FormBuilder to construct the form
     
     this._buildForm();
   }
 
   
-  private _setFormGolfer() {
+  private _setFormObj() {
     if (!this.isEdit) {
       // If creating a new Golfer, create new
       // FormGolferModel with default null data
-      return new FormGolferModel(null, null);
+      return new FormRoundModel(null,null /* Create a new 'group' and put in here*/,null, null);
     } else {
-      return new FormGolferModel(
-        this.golfer.nickname,
-        this.golfer.handicap
+      return new FormRoundModel(
+        this.round.description,
+        this.round.groups, 
+        this.round.date, 
+        this.round.course
       );
     }
   }
@@ -70,11 +90,14 @@ export class DataFormComponent implements OnInit, OnDestroy {
   
 
   private _buildForm() {
-    this.golferForm = this.fb.group({
-      nickname: [this.formGolfer.nickname, [
+    this.dataForm = this.fb.group({
+      description: [this.formObj.description, [
         Validators.required
       ]],
-      handicap: [this.formGolfer.handicap,
+      date: [this.formObj.date,
+        Validators.required
+      ],
+      course: [this.formObj.course,
         Validators.required
       ]
     });
@@ -83,7 +106,7 @@ export class DataFormComponent implements OnInit, OnDestroy {
     
 
     // Subscribe to form value changes
-    this.formChangeSub = this.golferForm
+    this.formChangeSub = this.dataForm
       .valueChanges
       .subscribe(data => this._onValueChanged());
 
@@ -98,7 +121,7 @@ export class DataFormComponent implements OnInit, OnDestroy {
           }
         }
       };
-      _markDirty(this.golferForm);
+      _markDirty(this.dataForm);
       
     }
 
@@ -106,10 +129,10 @@ export class DataFormComponent implements OnInit, OnDestroy {
   }
 
   private _onValueChanged() {
-    if (!this.golferForm) { return; }
+    if (!this.dataForm) { return; }
     const _setErrMsgs = (control: AbstractControl, errorsObj: any, field: string) => {
       if (control && control.dirty && control.invalid) {
-        const messages = this.df.validationMessages[field];
+        const messages = this.validationMessages[field];
         for (const key in control.errors) {
           if (control.errors.hasOwnProperty(key)) {
             errorsObj[field] += messages[key] + '<br>';
@@ -124,7 +147,7 @@ export class DataFormComponent implements OnInit, OnDestroy {
           // Set errors for fields not inside datesGroup
           // Clear previous error message (if any)
           this.formErrors[field] = '';
-          _setErrMsgs(this.golferForm.get(field), this.formErrors, field);
+          _setErrMsgs(this.dataForm.get(field), this.formErrors, field);
       }
     }
   }
@@ -133,27 +156,29 @@ export class DataFormComponent implements OnInit, OnDestroy {
 
     // Convert form startDate/startTime and endDate/endTime
     // to JS dates and populate a new GolferModel for submission
-    return new GolferModel(
-      this.golferForm.get('nickname').value, // Need to think about these - probably need to extract _id from these differently.  
-      this.golferForm.get('handicap').value,
-      this.golfer ? this.golfer._id : null
+    return new RoundModel(
+      this.dataForm.get('description').value, // Need to think about these - probably need to extract _id from these differently.  
+      this.dataForm.get('groups').value,
+      this.dataForm.get('date').value,
+      this.dataForm.get('course').value,
+      this.round ? this.round._id : null
     );
   }
 
   onSubmit() {
     this.submitting = true;
-    this.submitGolferObj = this._getSubmitObj();
+    this.submitObj = this._getSubmitObj();
 
     if (!this.isEdit) {
-      this.submitGolferSub = this.api
-        .postData$('golfers', [this.submitGolferObj])
+      this.submitSub = this.api
+        .postData$('rounds', [this.submitObj])
         .subscribe(
           data => this._handleSubmitSuccess(data),
           err => this._handleSubmitError(err)
         );
     } else {
-      this.submitGolferSub = this.api
-        .editData$('golfers', this.golfer._id, [this.submitGolferObj])
+      this.submitSub = this.api
+        .editData$('rounds', this.round._id, [this.submitObj])
         .subscribe(
           data => this._handleSubmitSuccess(data),
           err => this._handleSubmitError(err)
@@ -165,7 +190,7 @@ export class DataFormComponent implements OnInit, OnDestroy {
     this.error = false;
     this.submitting = false;
     // Redirect to Golfer detail
-    this.router.navigate(['/admin']);
+    this.router.navigate(['/home']);
   }
 
   private _handleSubmitError(err) {
@@ -175,12 +200,12 @@ export class DataFormComponent implements OnInit, OnDestroy {
   }
 
   resetForm() {
-    this.golferForm.reset();
+    this.dataForm.reset();
   }
 
   ngOnDestroy() {
-    if (this.submitGolferSub) {
-      this.submitGolferSub.unsubscribe();
+    if (this.submitSub) {
+      this.submitSub.unsubscribe();
     }
     this.formChangeSub.unsubscribe();
   }

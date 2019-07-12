@@ -19,6 +19,13 @@
             [queryParams]="{ tab: 'add' }"
             [ngClass]="{ 'active': utils.tabIs(tab, 'add') }">Add</a>
         </li>
+        <li class="nav-item">
+          <a
+            class="nav-link"
+            [routerLink]="[]"
+            [queryParams]="{ tab: 'courses' }"
+            [ngClass]="{ 'active': utils.tabIs(tab, 'courses') }">Courses</a>
+        </li>
 <!--         <li class="nav-item">
           <a
             class="nav-link"
@@ -48,6 +55,11 @@
       <app-data-form
         *ngIf="utils.tabIs(tab, 'add')"
         [golfer]="golfer"></app-data-form>
+      <app-course-form
+         *ngIf="utils.tabIs(tab, 'courses')"
+         [course]="course"></app-course-form>
+   
+
 
 <!--   </div> -->
     <!-- Error loading data -->
