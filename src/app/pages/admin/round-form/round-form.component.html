@@ -17,14 +17,23 @@
     </div>
   </div>
   <div class="form-group">
-    <label for="course">Course</label>
+<!--     <label for="course">Course</label>
       <input
             type="text"
             class="form-control"
             formControlName="course"
             id="course"
             required
-      >
+      > -->
+      <mat-form-field class="example-full-width">
+        <input type="text" placeholder="Course" aria-label="Course" matInput formControlName="course" [matAutocomplete]="auto">
+        <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayCourseFn">
+          <mat-option *ngFor="let course of filteredCourses | async" [value]="course">
+            {{course.name}}
+          </mat-option>
+        </mat-autocomplete>
+      </mat-form-field>
+    
     <div
       *ngIf="formErrors.course"
       class="small text-danger formErrors"
@@ -59,8 +68,25 @@
 				<!---dataForm Section -->
 				<div class="golfer-container" formArrayName="golfers">
 					<div [formGroupName]="j" *ngFor="let golfer of getGolfers(grp); let j = index">
-						<input type="text" class="form-control" placeholder="Untitled Question" formControlName="golferName">
-						<input type="text" class="form-control" placeholder="Handicap" formControlName="golferHandicap">
+            
+<!--             <select id="golferName" formControlName="golferName">
+              <option *ngFor="let g of filteredGolfers" [ngValue]="g"> {{g.nickname}}</option>
+            </select> -->
+            <mat-form-field class="example-full-width">
+              <input type="text" placeholder="Golfer" aria-label="Golfer" matInput formControlName="golferName" id="golferName" [matAutocomplete]="auto" >
+              <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn">
+                <mat-option *ngFor="let g of availableGolfers" [value]="g">
+                  {{g.nickname}}
+                </mat-option>
+              </mat-autocomplete>
+            </mat-form-field>
+            
+<!-- 						<input type="text" class="form-control" placeholder="Untitled Question" formControlName="golferName"> -->
+
+            <mat-form-field class="example-full-width">
+              <input matInput placeholder="Strokes" type=number value=0 formControlName="golferHandicap">
+            </mat-form-field>
+            
 
               <div *ngIf="dataForm.errors" class="alert alert-danger">
                 {{ dataForm.errors }}

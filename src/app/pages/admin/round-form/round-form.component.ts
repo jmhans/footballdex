@@ -3,7 +3,8 @@ import { Component, OnInit, OnDestroy, Input } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, AbstractControl, FormArray,  FormControl} from '@angular/forms';
 import { RoundModel, FormRoundModel } from './../../../core/models/round.model';
 import { ApiService } from './../../../core/services/api.service';
-import { Subscription } from 'rxjs';
+import { Subscription, Observable } from 'rxjs';
+import {map, startWith} from 'rxjs/operators';
 import { Router } from '@angular/router';
 
 @Component({
@@ -23,6 +24,21 @@ export class RoundFormComponent implements OnInit, OnDestroy {
   
   formGroupsArray: FormArray;
   formGolfersArray: FormArray;
+  
+  
+  availableGolfers: any[];
+  filteredGolfers: any[];
+  loading: boolean;
+  errors: boolean;
+  golfersSub: Subscription;
+  
+  filteredGolfersToo: Observable<any[]>[] = [];
+  
+  availableCourses: any[];
+  filteredCourses: Observable<any[]>;
+  coursesSub: Subscription;
+  
+  
   
   
   formChangeSub: Subscription;
@@ -47,7 +63,7 @@ export class RoundFormComponent implements OnInit, OnDestroy {
   // Set up errors object
   formErrors: any = {
     description: '',
-    weirdgroups: '',
+    groups: '',
     date: '', 
     course: ''
   }
@@ -81,13 +97,55 @@ export class RoundFormComponent implements OnInit, OnDestroy {
     // Set initial form data
     this.formObj = this._setFormObj();
     // Use FormBuilder to construct the form
-    
+    this._getAllGolfers();
+    this._getCourses();
     this._buildForm();
     
 
   }
-
   
+  private _getAllGolfers() {
+    this.loading = true;
+    // Get all (admin) events
+    this.golfersSub = this.api
+      .getData$('golfers')
+      .subscribe(
+        res => {
+          this.availableGolfers = res;
+          this.filteredGolfers = res;
+          this.loading = false;
+        },
+        err => {
+          console.error(err);
+          this.loading = false;
+          this.error = true;
+        }
+      );
+  }
+  
+  private _getCourses() {
+    this.loading = true;
+    this.coursesSub = this.api
+      .getData$('courses')
+      .subscribe(
+        res => {
+            this.availableCourses = res;
+          
+            this.filteredCourses = this.dataForm.get('course').valueChanges
+            .pipe(
+              startWith(''),
+              map(value => this._filter(value))
+            );
+            this.loading = false;
+        }, 
+        err => {
+          console.error(err);
+          this.loading = false;
+          this.error = true
+        }
+    );
+  }
+
   private _setFormObj() {
     if (!this.isEdit) {
       // If creating a new Golfer, create new
@@ -120,13 +178,13 @@ export class RoundFormComponent implements OnInit, OnDestroy {
       course: [this.formObj.course,
         Validators.required
       ], 
-      weirdgroups: [this.formGroupsArray],
       groups: this.fb.array([
         this.initGroup(),
       ]),
     });
     
-    
+
+
     // Subscribe to form value changes
     this.formChangeSub = this.dataForm
       .valueChanges
@@ -150,7 +208,15 @@ export class RoundFormComponent implements OnInit, OnDestroy {
     console.log(this.dataForm.controls);
 
     this._onValueChanged();
+    this.updateGolferLists();
   }
+  
+  private _filter(value: any): any[] {
+    
+    const filterValue = value.name ? value.name.toLowerCase() : value;
+    return this.availableCourses.filter(course => course.name.toLowerCase().includes(filterValue));
+  }
+  
 
   
   createGroupFromData(grp): FormGroup {
@@ -206,14 +272,13 @@ export class RoundFormComponent implements OnInit, OnDestroy {
     this.formGroupsArray.push(this.createGroup());
     //this.formGroupsArray.push(this.createFormGroup());
   }
-  getWeirdGroups(form) {
 
-    return form.controls.weirdgroups.controls;
-  }
   
 
   private _onValueChanged() {
     if (!this.dataForm) { return; }
+    
+    
     const _setErrMsgs = (control: AbstractControl, errorsObj: any, field: string) => {
       if (control && control.dirty && control.invalid) {
         const messages = this.validationMessages[field];
@@ -240,13 +305,24 @@ export class RoundFormComponent implements OnInit, OnDestroy {
 
     // Convert form startDate/startTime and endDate/endTime
     // to JS dates and populate a new GolferModel for submission
+    
+    var groupObj = this.dataForm.get('groups').value.map((grp) => this._getGroupSubmitObj(grp));
+    
     return new RoundModel(
       this.dataForm.get('description').value, // Need to think about these - probably need to extract _id from these differently.  
-      this.dataForm.get('weirdgroups').value,
+      groupObj,
       this.dataForm.get('date').value,
-      this.dataForm.get('course').value,
+      this.dataForm.get('course').value._id,
       this.round ? this.round._id : null
     );
+  }
+  
+  
+  private _getGroupSubmitObj(grp) {
+    var sc = grp.golfers.map((golfer) => { return { golfer: golfer.golferName._id, 
+                                           handicap_strokes: golfer.golferHandicap,
+                                           holes: []};})
+    return { groupTitle: grp.groupTitle, scorecards: sc}
   }
 
   onSubmit() {
@@ -291,6 +367,23 @@ export class RoundFormComponent implements OnInit, OnDestroy {
     const control = <FormArray>this.dataForm.get('groups');
     control.push(this.initGroup());
   }
+  
+  updateGolferLists() {
+    for(var grp=0; grp<this.dataForm.get('groups')['controls'].length; grp++) {
+      const control = this.dataForm.get('groups')['controls'][grp].get('golfers');
+      for (var golfer=0; golfer<control['controls'].length; golfer++) {
+        var golferCtrl = control['controls'][golfer];
+        this.filteredGolfersToo[golfer] = golferCtrl.valueChanges
+          .pipe(       
+          startWith(''),
+          map(value => this._filter(value))
+        
+        )
+      }
+    }
+    
+  }
+  
 
   addGolfer(j) {
     console.log(j);
@@ -320,12 +413,23 @@ export class RoundFormComponent implements OnInit, OnDestroy {
    control.removeAt(i);
 
   }
+  
+  displayFn(val: any) {
+    return val ? val.nickname : val;
+  }
+  
+  displayCourseFn(val: any) {
+    return val ? val.name : val
+  }
+  
+
+  
 
   private _handleSubmitSuccess(res) {
     this.error = false;
     this.submitting = false;
     // Redirect to Golfer detail
-    this.router.navigate(['/home']);
+    this.router.navigate(['/']);
   }
 
   private _handleSubmitError(err) {

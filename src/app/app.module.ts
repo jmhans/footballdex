@@ -9,7 +9,9 @@ import {MatPaginatorModule} from '@angular/material/paginator';
 import {MatSortModule} from '@angular/material/sort';
 import {MatFormFieldModule} from '@angular/material';
 import {MatDatepickerModule} from '@angular/material/datepicker';
-import {MatInputModule, MatNativeDateModule} from '@angular/material';
+import {MatInputModule, MatNativeDateModule, MatAutocompleteModule} from '@angular/material';
+
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { HttpModule } from '@angular/http';
 import { HttpClientModule }    from '@angular/common/http';
@@ -59,8 +61,10 @@ import { CreateRoundComponent } from './pages/admin/create-round/create-round.co
   ],
   imports: [
     BrowserModule,
+    BrowserAnimationsModule,
     FormsModule,
     ReactiveFormsModule,
+    MatAutocompleteModule,
     MatSelectModule,
     MatTableModule,
     MatPaginatorModule, 
