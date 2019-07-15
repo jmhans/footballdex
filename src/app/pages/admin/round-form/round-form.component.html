@@ -46,8 +46,42 @@
       [innerHTML]="formErrors.description">
     </div>
   </div>
-
   
+  
+  Groups
+  
+  	<div formArrayName="groups">
+		<div class="section-container" *ngFor="let grp of getGroups(dataForm); let i = index">
+			<div class="ui raised segments" [formGroupName]="i">
+				<h4 class="ui header">Group Details</h4>
+				<input class="form-control" type="text" placeholder="Group Name" formControlName="groupTitle" id="groupTitle">
+				<!-- Question segment -->
+				<!---dataForm Section -->
+				<div class="golfer-container" formArrayName="golfers">
+					<div [formGroupName]="j" *ngFor="let golfer of getGolfers(grp); let j = index">
+						<input type="text" class="form-control" placeholder="Untitled Question" formControlName="golferName">
+						<input type="text" class="form-control" placeholder="Handicap" formControlName="golferHandicap">
+
+              <div *ngIf="dataForm.errors" class="alert alert-danger">
+                {{ dataForm.errors }}
+              </div>
+
+            <button class="btn btn-danger btn-xs" 
+              type="button"
+              (click)="removeGolfer(i)">Remove Golfer</button>
+					</div>
+            <button class="btn btn-success" 
+              type="button"
+              (click)="addGolfer(i)">Add Golfer</button>
+				</div>
+				<!-- End Question -->
+
+			</div>
+			<span *ngIf="getGroups(dataForm).length > 1" (click)="removeGroup(i)" class="btn btn-danger">Remove Group</span>
+		</div>
+      <button type="button" (click)="addGroup()" class="btn btn-success">Add Group </button>
+			
+	</div>
 
   <!-- Submit -->
   <div class="form-group">

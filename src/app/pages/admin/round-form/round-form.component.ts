@@ -1,6 +1,6 @@
 
 import { Component, OnInit, OnDestroy, Input } from '@angular/core';
-import { FormGroup, FormBuilder, Validators, AbstractControl } from '@angular/forms';
+import { FormGroup, FormBuilder, Validators, AbstractControl, FormArray,  FormControl} from '@angular/forms';
 import { RoundModel, FormRoundModel } from './../../../core/models/round.model';
 import { ApiService } from './../../../core/services/api.service';
 import { Subscription } from 'rxjs';
@@ -20,7 +20,11 @@ export class RoundFormComponent implements OnInit, OnDestroy {
   // Model storing initial form values
   formObj: FormRoundModel;
   // Form validation and disabled logic
-
+  
+  formGroupsArray: FormArray;
+  formGolfersArray: FormArray;
+  
+  
   formChangeSub: Subscription;
   // Form submission
   submitObj: RoundModel;
@@ -29,11 +33,21 @@ export class RoundFormComponent implements OnInit, OnDestroy {
   submitting: boolean;
   submitBtnText: string;
   
+//   dataForm: FormGroup;
+  
+  minLengthArray(min: number) {
+    return (c: AbstractControl): {[key: string]: any} => {
+        if (c.value.length >= min)
+            return null;
+
+        return { 'minLengthArray': {valid: false }};
+    }
+  }
   
   // Set up errors object
   formErrors: any = {
     description: '',
-    groups: '',
+    weirdgroups: '',
     date: '', 
     course: ''
   }
@@ -69,6 +83,8 @@ export class RoundFormComponent implements OnInit, OnDestroy {
     // Use FormBuilder to construct the form
     
     this._buildForm();
+    
+
   }
 
   
@@ -76,7 +92,7 @@ export class RoundFormComponent implements OnInit, OnDestroy {
     if (!this.isEdit) {
       // If creating a new Golfer, create new
       // FormGolferModel with default null data
-      return new FormRoundModel(null,null /* Create a new 'group' and put in here*/,null, null);
+      return new FormRoundModel(null,[{golfer: 'somename', otherField: 'somevalue'}] /* Create a new 'group' and put in here*/,null, null);
     } else {
       return new FormRoundModel(
         this.round.description,
@@ -86,10 +102,14 @@ export class RoundFormComponent implements OnInit, OnDestroy {
       );
     }
   }
-  
+
+
   
 
   private _buildForm() {
+    
+    this.formGroupsArray = this.fb.array(this.formObj.groups.map((grp) => this.createFormGroup(grp)), this.minLengthArray(1));
+
     this.dataForm = this.fb.group({
       description: [this.formObj.description, [
         Validators.required
@@ -99,12 +119,14 @@ export class RoundFormComponent implements OnInit, OnDestroy {
       ],
       course: [this.formObj.course,
         Validators.required
-      ]
+      ], 
+      weirdgroups: [this.formGroupsArray],
+      groups: this.fb.array([
+        this.initGroup(),
+      ]),
     });
     
-   
     
-
     // Subscribe to form value changes
     this.formChangeSub = this.dataForm
       .valueChanges
@@ -124,9 +146,71 @@ export class RoundFormComponent implements OnInit, OnDestroy {
       _markDirty(this.dataForm);
       
     }
+    
+    console.log(this.dataForm.controls);
 
     this._onValueChanged();
   }
+
+  
+  createGroupFromData(grp): FormGroup {
+    
+    return this.fb.group({
+      golfers: this.fb.array([grp.golfers.map((golfer) => this.createGolferFromData(golfer))])
+    })
+    
+    
+//    return this.fb.array(grp.golfers.map((golfer)=> this.createGolferFromData(golfer)), this.minLengthArray(1));
+  }
+  
+  createFormGroup(grp): FormGroup {
+    return this.fb.group({
+      golfer: [grp.golfer],
+      otherField: [grp.otherField]
+    })
+  }
+  
+
+  
+  createGolferFromData(golfer): FormGroup {
+    return this.fb.group({
+      golfer: golfer, 
+      handicap_strokes: golfer.handicap_strokes
+    })
+  }
+  
+  
+  createGolfer(): FormGroup {
+    return this.fb.group({
+      golfer: '',
+      handicap_strokes: 0
+    });
+  }
+  
+  createGroup(): FormGroup {
+    
+    
+    return this.fb.group({
+      golfer: ['man this sucks'], 
+      otherField: ['like seriously.']
+    }); //this.fb.array([this.createGolfer()], this.minLengthArray(1))});
+  }
+  
+  
+  addGolferToGroup(grp): void {
+    grp.push(this.createGolfer());
+  }
+  
+  addNewGroup(): void {
+    //this.formGroupsArray = this.dataForm.get('groups') as FormArray;
+    this.formGroupsArray.push(this.createGroup());
+    //this.formGroupsArray.push(this.createFormGroup());
+  }
+  getWeirdGroups(form) {
+
+    return form.controls.weirdgroups.controls;
+  }
+  
 
   private _onValueChanged() {
     if (!this.dataForm) { return; }
@@ -158,7 +242,7 @@ export class RoundFormComponent implements OnInit, OnDestroy {
     // to JS dates and populate a new GolferModel for submission
     return new RoundModel(
       this.dataForm.get('description').value, // Need to think about these - probably need to extract _id from these differently.  
-      this.dataForm.get('groups').value,
+      this.dataForm.get('weirdgroups').value,
       this.dataForm.get('date').value,
       this.dataForm.get('course').value,
       this.round ? this.round._id : null
@@ -184,6 +268,57 @@ export class RoundFormComponent implements OnInit, OnDestroy {
           err => this._handleSubmitError(err)
         );
     }
+  }
+  
+  
+  
+  initGroup() {
+    return this.fb.group({
+      groupTitle: [''],
+      golfers: this.fb.array([
+        this.initGolfer()
+        ])
+    });
+  }
+  initGolfer() {
+    return this.fb.group({
+      golferName: ['something'],
+      golferHandicap: [0]
+    });
+  }
+
+  addGroup() {
+    const control = <FormArray>this.dataForm.get('groups');
+    control.push(this.initGroup());
+  }
+
+  addGolfer(j) {
+    console.log(j);
+    const control = <FormArray>this.dataForm.get('groups')['controls'][j].get('golfers');
+   // console.log(control);
+    control.push(this.initGolfer());
+    
+  }
+
+  getGroups(form) {
+    //console.log(form.get('sections').controls);
+    return form.controls.groups['controls'];
+  }
+  getGolfers(form) {
+   //console.log(form.controls.questions.controls);
+    return form.controls.golfers['controls'];
+  }
+
+
+  removeGolfer(j){
+     const control = <FormArray>this.dataForm.get('groups')['controls'][j].get('golfers');
+     control.removeAt(j);
+  }
+
+  removeGroup(i){
+   const control = <FormArray>this.dataForm.get('groups');
+   control.removeAt(i);
+
   }
 
   private _handleSubmitSuccess(res) {
