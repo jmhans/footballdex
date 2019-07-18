@@ -1,0 +1,40 @@
+<div class="card-body">
+  <h2 class="card-title text-center mb-0">Scorecards</h2>
+</div>
+
+ <ul class="list-group list-group-flush">
+  <li class="list-group-item" *ngFor="let grp of scorecards">
+    <strong>Group Name:</strong>{{ grp.groupTitle }}
+    <ul class="list-group list-group-flush">
+      <li class="list-group-item" *ngFor="let sc of grp.scorecards">
+        {{sc | json}}
+        <table mat-table [dataSource]="sc.holes">
+
+          <ng-container *ngFor="let disCol of displayedColumsn; let colIndex = index" matColumnDef="{{disCol}}">
+            <th mat-header-cell *matHeaderCellDef>{{disCol}}</th>
+            <td mat-cell *matCellDef="let element">{{element[disCol]}}</td>
+          </ng-container>
+
+
+          <tr mat-header-row *matHeaderRowDef="displayedColumsn"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+        </table>
+      
+      
+      </li>
+    </ul>
+  </li>
+
+</ul>
+
+
+
+
+
+
+<div *ngIf="auth.isAdmin" class="card-footer text-right small">
+  <!-- To do: create an /admin/game/update route and service -->
+  <a [routerLink]="['/admin/round', scorecards[0].scorecards[0]._id]">Edit</a>
+</div>
+
+

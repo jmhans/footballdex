@@ -34,7 +34,7 @@ export class CourseFormComponent implements OnInit, OnDestroy {
   formErrors: any = {
     name: '',
     location: '',
-    holes: ''
+    tees: ''
   }
   
   validationMessages: any = {
@@ -44,8 +44,8 @@ export class CourseFormComponent implements OnInit, OnDestroy {
       location: {
         required: `Location is <strong>required</strong>.`
       }, 
-      holes: {
-        required: 'Holes are <strong>required</strong>'
+      tees: {
+        required: 'Tees are <strong>required</strong>'
       }
     }
   
@@ -77,7 +77,7 @@ export class CourseFormComponent implements OnInit, OnDestroy {
       return new FormCourseModel(
         this.course.name,
         this.course.location, 
-        this.course.holes
+        this.course.tees
       );
     }
   }
@@ -92,7 +92,7 @@ export class CourseFormComponent implements OnInit, OnDestroy {
       location: [this.formObj.location,
         Validators.required
       ],
-      holes: [this.formObj.holes,
+      tees: [this.formObj.tees,
         Validators.required
       ]
     });
@@ -154,7 +154,7 @@ export class CourseFormComponent implements OnInit, OnDestroy {
     return new CourseModel(
       this.dataForm.get('name').value, // Need to think about these - probably need to extract _id from these differently.  
       this.dataForm.get('handicap').value,
-      this.dataForm.get('holes').value,
+      this.dataForm.get('tees').value,
       this.course ? this.course._id : null
     );
   }

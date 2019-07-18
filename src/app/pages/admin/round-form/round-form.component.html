@@ -2,14 +2,11 @@
 <form [formGroup]="dataForm" (ngSubmit)="onSubmit()">
   
     <div class="form-group">
-    <label for="date">Date</label>
-      <input
-            type="text"
-            class="form-control"
-            formControlName="date"
-            id="date"
-            required
-      >
+      <mat-form-field>
+        <input matInput [matDatepicker]="picker" placeholder="Choose a date" formControlName="date">
+        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+        <mat-datepicker #picker></mat-datepicker>
+      </mat-form-field>
     <div
       *ngIf="formErrors.date"
       class="small text-danger formErrors"
@@ -83,6 +80,14 @@
             
 <!-- 						<input type="text" class="form-control" placeholder="Untitled Question" formControlName="golferName"> -->
 
+            <mat-form-field class="example-full-width">
+                <mat-label>Tee</mat-label>
+                <mat-select formControlName="golferTee">
+                  <mat-option *ngFor="let t of getTees()" [value]="t">
+                    {{t.name}}
+                  </mat-option>
+                </mat-select>
+            </mat-form-field>
             <mat-form-field class="example-full-width">
               <input matInput placeholder="Strokes" type=number value=0 formControlName="golferHandicap">
             </mat-form-field>

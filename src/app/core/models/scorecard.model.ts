@@ -1,13 +1,15 @@
 
-class GolferModel {
+class ScorecardModel {
     constructor(
-    public nickname: string,
-    public handicap: number,
+    public golfer: string,
+    public handicap_strokes: number,
+    public tee: string,
+    public holes: object[],
     public _id?: string
   ) { }
 }
 
-class FormGolferModel {
+class FormScorecardModel {
   constructor(
     public nickname: string,
      public handicap: number
@@ -15,6 +17,4 @@ class FormGolferModel {
 }
 
 
-
-
-export { GolferModel, FormGolferModel };
+export { ScorecardModel, FormScorecardModel };

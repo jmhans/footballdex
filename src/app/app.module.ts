@@ -39,6 +39,10 @@ import { RoundFormComponent } from './pages/admin/round-form/round-form.componen
 import { ScorecardFormComponent } from './pages/admin/scorecard-form/scorecard-form.component';
 import { GroupFormComponent } from './pages/admin/group-form/group-form.component';
 import { CreateRoundComponent } from './pages/admin/create-round/create-round.component';
+import { RoundsComponent } from './pages/rounds/rounds.component';
+import { RoundComponent } from './pages/rounds/round/round.component';
+import { RoundDetailsComponent } from './pages/rounds/round/round-details/round-details.component';
+import { ScorecardComponent } from './scorecard/scorecard.component';
 
 
 @NgModule({
@@ -57,7 +61,11 @@ import { CreateRoundComponent } from './pages/admin/create-round/create-round.co
     RoundFormComponent,
     ScorecardFormComponent,
     GroupFormComponent,
-    CreateRoundComponent
+    CreateRoundComponent,
+    RoundsComponent,
+    RoundComponent,
+    RoundDetailsComponent,
+    ScorecardComponent
   ],
   imports: [
     BrowserModule,

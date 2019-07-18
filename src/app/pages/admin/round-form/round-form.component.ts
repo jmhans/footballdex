@@ -22,10 +22,6 @@ export class RoundFormComponent implements OnInit, OnDestroy {
   formObj: FormRoundModel;
   // Form validation and disabled logic
   
-  formGroupsArray: FormArray;
-  formGolfersArray: FormArray;
-  
-  
   availableGolfers: any[];
   filteredGolfers: any[];
   loading: boolean;
@@ -37,8 +33,6 @@ export class RoundFormComponent implements OnInit, OnDestroy {
   availableCourses: any[];
   filteredCourses: Observable<any[]>;
   coursesSub: Subscription;
-  
-  
   
   
   formChangeSub: Subscription;
@@ -166,8 +160,7 @@ export class RoundFormComponent implements OnInit, OnDestroy {
 
   private _buildForm() {
     
-    this.formGroupsArray = this.fb.array(this.formObj.groups.map((grp) => this.createFormGroup(grp)), this.minLengthArray(1));
-
+  
     this.dataForm = this.fb.group({
       description: [this.formObj.description, [
         Validators.required
@@ -218,63 +211,6 @@ export class RoundFormComponent implements OnInit, OnDestroy {
   }
   
 
-  
-  createGroupFromData(grp): FormGroup {
-    
-    return this.fb.group({
-      golfers: this.fb.array([grp.golfers.map((golfer) => this.createGolferFromData(golfer))])
-    })
-    
-    
-//    return this.fb.array(grp.golfers.map((golfer)=> this.createGolferFromData(golfer)), this.minLengthArray(1));
-  }
-  
-  createFormGroup(grp): FormGroup {
-    return this.fb.group({
-      golfer: [grp.golfer],
-      otherField: [grp.otherField]
-    })
-  }
-  
-
-  
-  createGolferFromData(golfer): FormGroup {
-    return this.fb.group({
-      golfer: golfer, 
-      handicap_strokes: golfer.handicap_strokes
-    })
-  }
-  
-  
-  createGolfer(): FormGroup {
-    return this.fb.group({
-      golfer: '',
-      handicap_strokes: 0
-    });
-  }
-  
-  createGroup(): FormGroup {
-    
-    
-    return this.fb.group({
-      golfer: ['man this sucks'], 
-      otherField: ['like seriously.']
-    }); //this.fb.array([this.createGolfer()], this.minLengthArray(1))});
-  }
-  
-  
-  addGolferToGroup(grp): void {
-    grp.push(this.createGolfer());
-  }
-  
-  addNewGroup(): void {
-    //this.formGroupsArray = this.dataForm.get('groups') as FormArray;
-    this.formGroupsArray.push(this.createGroup());
-    //this.formGroupsArray.push(this.createFormGroup());
-  }
-
-  
-
   private _onValueChanged() {
     if (!this.dataForm) { return; }
     
@@ -317,11 +253,24 @@ export class RoundFormComponent implements OnInit, OnDestroy {
     );
   }
   
+  getTees() {
+    if (!this.dataForm.get('course').value) {
+      return [];
+    } 
+      return this.dataForm.get('course').value.tees;  
+
+  }
+  
+  
   
   private _getGroupSubmitObj(grp) {
+    
+    var courseTees = this.dataForm.get('course').value.tees;
+    
     var sc = grp.golfers.map((golfer) => { return { golfer: golfer.golferName._id, 
                                            handicap_strokes: golfer.golferHandicap,
-                                           holes: []};})
+                                           tee: golfer.golferTee.name,
+                                           holes: golfer.golferTee.holes};})
     return { groupTitle: grp.groupTitle, scorecards: sc}
   }
 
@@ -358,8 +307,9 @@ export class RoundFormComponent implements OnInit, OnDestroy {
   }
   initGolfer() {
     return this.fb.group({
-      golferName: ['something'],
-      golferHandicap: [0]
+      golferName: [''],
+      golferHandicap: [0], 
+      golferTee: ['']
     });
   }
 

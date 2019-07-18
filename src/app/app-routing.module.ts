@@ -8,6 +8,8 @@ import { AdminComponent } from './pages/admin/admin.component';
 import { GolferComponent } from './pages/golfer/golfer.component';
 
 import { CreateRoundComponent } from './pages/admin/create-round/create-round.component';
+import { RoundComponent } from './pages/rounds/round/round.component';
+import { RoundsComponent } from './pages/rounds/rounds.component';
 
 const routes: Routes = [
   {
@@ -20,7 +22,9 @@ const routes: Routes = [
   }, 
   {path: 'admin', canActivate: [ AuthGuard, AdminGuard ], children: [ { path: '', component: AdminComponent }]}, 
   {path: 'golfer', canActivate: [ AuthGuard ], children: [{ path: ':id', component: GolferComponent }]},
-  {path: 'round', canActivate: [ AuthGuard], children: [{ path: 'new', component: CreateRoundComponent}]}
+  {path: 'round', canActivate: [ AuthGuard ], children: [{ path: ':id', component: RoundComponent}]}, 
+  {path: 'create', canActivate: [ AuthGuard, AdminGuard], children: [ {path: 'round', component: CreateRoundComponent}]},
+  {path: 'rounds', canActivate: [ AuthGuard] ,component: RoundsComponent}
   
   
 ];

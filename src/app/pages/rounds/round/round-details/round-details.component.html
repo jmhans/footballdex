@@ -1,0 +1,19 @@
+<div class="card-body">
+  <h2 class="card-title text-center mb-0">Round Details</h2>
+</div>
+
+<ul class="list-group list-group-flush">
+  <li class="list-group-item">
+    <strong>When:</strong>{{ round.date }}
+  </li>
+  <li class="list-group-item">
+    <strong>Description:</strong> {{round.description}}
+  </li>
+</ul>
+{{round.groups | json }}
+
+<div *ngIf="auth.isAdmin" class="card-footer text-right small">
+  <!-- To do: create an /admin/game/update route and service -->
+  <a [routerLink]="['/admin/round', round._id]">Edit</a>
+</div>
+

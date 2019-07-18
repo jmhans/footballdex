@@ -1,6 +1,7 @@
 
 class GroupModel {
     constructor(
+    public groupTitle: string,
     public scorecards: any[]
   ) { }
 }

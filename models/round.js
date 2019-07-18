@@ -5,7 +5,8 @@ const Schema = mongoose.Schema;
 const scorecardSchema = new Schema({
     golfer: {type: Schema.Types.ObjectId, ref: 'Golfer'},
     handicap_strokes: {type: Number, required: false},
-    holes: {type: [{number: Number, par: Number, score: Number, handicap: Number, handicap_strokes: Number , tee: Object}], required: false}
+    tee: {type: String, required: true}, 
+    holes: {type: [{number: Number, par: Number, score: Number, handicap: Number, handicap_strokes: Number}], required: false}
 })
 
 const groupSchema = new Schema({

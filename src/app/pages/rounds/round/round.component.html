@@ -1,0 +1,46 @@
+
+<ng-template [ngIf]="utils.isLoaded(loading) ? true: false">
+  <h1 class="text-center">{{ pageTitle }}</h1>
+  <!-- Event -->
+  <ng-template [ngIf]="round">
+    <div class="card">
+      <!-- Event tab navigation -->
+      <div class="card-header">
+        <ul class="nav nav-tabs card-header-tabs">
+          <li class="nav-item">
+            <a
+              class="nav-link"
+              [routerLink]="[]"
+              [queryParams]="{ tab: 'details' }"
+              [ngClass]="{ 'active': utils.tabIs(tab, 'details') }">Details</a>
+          </li>
+          <li class="nav-item" >
+            <a
+               class="nav-link"
+               [routerLink]="[]"
+               [queryParams]="{ tab: 'scorecards'}"
+               [ngClass] = "{ 'active': utils.tabIs(tab, 'scorecards') }"
+               >Scorecard</a>
+          </li>
+        </ul>
+        
+      </div>
+
+      <!-- Round detail tab -->
+      <app-round-details
+        *ngIf="utils.tabIs(tab, 'details')"
+        [round]="round"></app-round-details>
+      <app-scorecard
+         *ngIf="utils.tabIs(tab, 'scorecards')"
+         [scorecards]="round.groups"></app-scorecard>
+
+
+    </div>
+  </ng-template>
+
+  <!-- Error loading events -->
+  <p *ngIf="error" class="alert alert-danger">
+    <strong>Oops!</strong> There was an error retrieving information for this round.
+  </p>
+</ng-template>
+
