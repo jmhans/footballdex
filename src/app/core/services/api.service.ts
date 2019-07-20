@@ -62,7 +62,16 @@ export class ApiService {
       );
   }
   
-  
+  editScores$(round: string, group_id: string, data: any[]): Observable < any[] > {
+    return this.http
+      .put < any[] > (`${this.base_api}rounds/${round}/scores/${group_id}`, data, {
+        headers: new HttpHeaders().set('Authorization', this._authHeader)
+      })
+      .pipe(
+        catchError((error) => this._handleError(error))
+      );
+  }
+    
 
   private _handleError(err: HttpErrorResponse | any): Observable<any> {
     const errorMsg = err.message || 'Error: Unable to complete request.';

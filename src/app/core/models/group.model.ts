@@ -2,13 +2,16 @@
 class GroupModel {
     constructor(
     public groupTitle: string,
-    public scorecards: any[]
+    public scorecards: any[], 
+    public _id?: string
   ) { }
 }
 
 class FormGroupModel {
   constructor(
-    public scorecards: any[]
+    public groupTitle: string, 
+    public scorecards: any[], 
+    public _id?: string
   ) { }
 }
 

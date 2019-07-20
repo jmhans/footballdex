@@ -36,7 +36,7 @@ _getOne(req, res, next) {
 }
 
 _update (req, res, next) {
-  var options = {new : true, upsert : true};
+  var options = {new : true, upsert : true, useFindAndModify: false};
   this.model.findByIdAndUpdate(req.params.id, req.body, options,  function (err, post) {
     if (err) return next(err);
     res.json(post);

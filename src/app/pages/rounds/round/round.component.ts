@@ -26,6 +26,7 @@ round: RoundModel;
 loading: boolean;
 error: boolean;
 tab: string;
+playHole: number;
 
   constructor(
     private route: ActivatedRoute,
@@ -58,6 +59,7 @@ tab: string;
     this.tabSub = this.route.queryParams
       .subscribe(queryParams => {
         this.tab = queryParams['tab'] || 'details';
+        this.playHole = parseInt(queryParams['hole']) || 1;
       });
   }
 
@@ -80,6 +82,7 @@ tab: string;
         }
       );
   }
+
 
   private _setPageTitle(title: string) {
     this.pageTitle = title;

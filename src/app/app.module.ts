@@ -10,6 +10,9 @@ import {MatSortModule} from '@angular/material/sort';
 import {MatFormFieldModule} from '@angular/material';
 import {MatDatepickerModule} from '@angular/material/datepicker';
 import {MatInputModule, MatNativeDateModule, MatAutocompleteModule} from '@angular/material';
+import { MatMenuModule} from '@angular/material/menu';
+import {MatButtonModule} from '@angular/material/button';
+
 
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
@@ -43,6 +46,7 @@ import { RoundsComponent } from './pages/rounds/rounds.component';
 import { RoundComponent } from './pages/rounds/round/round.component';
 import { RoundDetailsComponent } from './pages/rounds/round/round-details/round-details.component';
 import { ScorecardComponent } from './scorecard/scorecard.component';
+import { EditComponent } from './scorecard/edit/edit.component';
 
 
 @NgModule({
@@ -65,7 +69,8 @@ import { ScorecardComponent } from './scorecard/scorecard.component';
     RoundsComponent,
     RoundComponent,
     RoundDetailsComponent,
-    ScorecardComponent
+    ScorecardComponent,
+    EditComponent
   ],
   imports: [
     BrowserModule,
@@ -85,7 +90,10 @@ import { ScorecardComponent } from './scorecard/scorecard.component';
     HttpClientModule,
     AppRoutingModule, 
     HttpClientModule,
-    AuthModule.forRoot()
+    AuthModule.forRoot(),
+     MatMenuModule,
+    MatButtonModule
+    
   ],
   providers: [
     Title, 
