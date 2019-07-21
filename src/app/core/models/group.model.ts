@@ -3,6 +3,7 @@ class GroupModel {
     constructor(
     public groupTitle: string,
     public scorecards: any[], 
+    public groupScores: any[], 
     public _id?: string
   ) { }
 }

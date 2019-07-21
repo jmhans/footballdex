@@ -1,6 +1,6 @@
 // src/app/auth/auth.service.ts
 import { Injectable } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router,NavigationExtras } from '@angular/router';
 import { BehaviorSubject } from 'rxjs';
 import { AUTH_CONFIG } from './auth.config';
 import * as auth0 from 'auth0-js';
@@ -133,6 +133,11 @@ export class AuthService {
     // Redirect with or without 'tab' query parameter
     // Note: does not support additional params besides 'tab'
     const fullRedirect = decodeURI(localStorage.getItem('authRedirect') || '');
+    
+    let navigationExtras: NavigationExtras = {
+      queryParamsHandling: 'preserve',
+      preserveFragment: true
+    };
     const redirectArr = fullRedirect.split('?tab=');
     const navArr = [redirectArr[0] || '/'];
     const tabObj = redirectArr[1] ? { queryParams: { tab: redirectArr[1] }} : null;
@@ -140,7 +145,7 @@ export class AuthService {
     if (!tabObj) {
       this.router.navigate(navArr);
     } else {
-      this.router.navigate(navArr, tabObj);
+      this.router.navigateByUrl(fullRedirect, navigationExtras);
     }
     // Redirection completed; clear redirect from storage
     this._clearRedirect();

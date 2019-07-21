@@ -10,7 +10,6 @@ import { ActivatedRoute } from '@angular/router';
 
 
 interface ScoreEntry {
-  hole: number;  
   golfer: any;
   score: number;
 }
@@ -41,7 +40,7 @@ export class ScorecardFormComponent implements OnInit, OnDestroy {
   
   formChangeSub: Subscription;
   // Form submission
-  submitObj: ScoreEntry[];
+  submitObj: {hole: number, groupScore: Number, golferScores: ScoreEntry[]};
   submitSub: Subscription;
   error: boolean;
   submitting: boolean;
@@ -116,8 +115,8 @@ export class ScorecardFormComponent implements OnInit, OnDestroy {
   
 
   private _buildForm() {
+    this.group.groupScores = this.group.groupScores || [{hole: this.hole, score: ''}]
     
-  
     this.dataForm = this.fb.group({
       golferScores: this.fb.array(
         this.group.scorecards.map((sc)=> {
@@ -139,7 +138,8 @@ export class ScorecardFormComponent implements OnInit, OnDestroy {
             newScore: [sc.holes.find((hl)=> {return (hl.number ==_this.hole);}).score || 0,[]]
           }))
         })
-      )
+      ), 
+      groupScore: [this.curGroupScoreHole().score ,[] ]
     });
     
 
@@ -171,13 +171,23 @@ export class ScorecardFormComponent implements OnInit, OnDestroy {
     this._onValueChanged();
   }
   
+  curGroupScoreHole() {
+    return this.group.groupScores.find((hl)=> {return (hl.number == this.hole)}) || {hole: this.hole, score: 0}
+  }
+  
+  
    private _updateFormData() {
      const _this = this
+     
      for (var g = 0; g < this.group.scorecards.length; g++) {
        var this_score = _this.group.scorecards[g].holes.find((hl) => {return hl.number == _this.hole}).score
        if (_this.dataForm) {
          _this.dataForm.get('allScores')['controls'][g].get("newScore").setValue(this_score);
+         
        }
+     }
+     if (this.dataForm) {
+       this.dataForm.get('groupScore').setValue(this.curGroupScoreHole().score)
      }
 
    }
@@ -234,16 +244,17 @@ export class ScorecardFormComponent implements OnInit, OnDestroy {
 
     const _this = this
     const outputArr: ScoreEntry[] = []
-    
+
     for (var g=0; g<_this.group.scorecards.length; g++) {
       const outputObj: ScoreEntry = {
-        hole: _this.hole,
         golfer: this.group.scorecards[g].golfer, 
         score:  _this.dataForm.get('allScores')['controls'].find((fg)=> {return fg['controls'].golfer.value._id == this.group.scorecards[g].golfer._id}).value.newScore
       }
       outputArr.push(outputObj);
     }
-    return outputArr;
+    const finalOutputObj =  {hole: _this.hole, groupScore: _this.dataForm.get('groupScore').value, golferScores: outputArr}
+    
+    return finalOutputObj;
   }
   
 

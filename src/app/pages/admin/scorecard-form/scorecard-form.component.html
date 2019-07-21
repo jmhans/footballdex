@@ -2,7 +2,7 @@
 
         
 <a [routerLink]="[]" [queryParams]="{ tab: 'play', hole: previousHole()}">
-  <i class="material-icons">chevron_left</i></a> {{hole}} of 18
+  <i class="material-icons">chevron_left</i></a> Hole {{hole}} of 18
 <!--     <mat-form-field class="example-full-width">
         <input type="number" placeholder="Hole" class="form-control" aria-label="Hole" matInput formControlName="hole">
       </mat-form-field> -->
@@ -32,7 +32,7 @@
           <input matInput type="text" placeholder="Golfer" formControlName="golfer" value="ctrl['controls'].golfer.value">
         </mat-form-field> -->
         <mat-form-field class="example-full-width">
-          <input matInput type="number" placeholder="Score" formControlName="newScore">
+          <input matInput type="number" placeholder="Score" formControlName="newScore" class= "right">
         </mat-form-field>
 <!--         <span formArrayName="scores">
           <span class="section-container" *ngFor="let ctrl3 of getScores(ctrl2, hole); let s = index">
@@ -56,6 +56,12 @@
       
 			
 	</div>
+  <div>
+        <mat-form-field class="example-full-width">
+          <input matInput type="number" placeholder="Group Score" formControlName="groupScore">
+        </mat-form-field>
+    
+  </div>
   
 
   <!-- Submit -->

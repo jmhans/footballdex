@@ -62,7 +62,7 @@ export class ApiService {
       );
   }
   
-  editScores$(round: string, group_id: string, data: any[]): Observable < any[] > {
+  editScores$(round: string, group_id: string, data: any): Observable < any[] > {
     return this.http
       .put < any[] > (`${this.base_api}rounds/${round}/scores/${group_id}`, data, {
         headers: new HttpHeaders().set('Authorization', this._authHeader)

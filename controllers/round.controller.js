@@ -32,19 +32,28 @@ _populatedGetOne(req, res, next) {
 
   _updateScores (req, res, next) {
     //assumes [{golfer: {}, score: 2, hole: 3}]
-    const golfer = req.body[0].golfer
-    console.log(golfer)
+
     var query = { "groups._id": req.params.grp};
     
     this.model.findOne(query).exec((err, _doc)=> {
       var this_group = _doc.groups.find((grp)=> {return grp._id == req.params.grp})
       var this_golfer = {};
       var this_hole = {};
-      for (var g=0; g<req.body.length; g++) {
-        this_golfer = this_group.scorecards.find((sc) => {return sc.golfer._id == req.body[g].golfer._id});
-        this_hole = this_golfer.holes.find((hl)=> {return hl.number == req.body[g].hole});
-        this_hole.score = req.body[g].score;
+      for (var g=0; g<req.body.golferScores.length; g++) {
+        this_golfer = this_group.scorecards.find((sc) => {return sc.golfer._id == req.body.golferScores[g].golfer._id});
+        this_hole = this_golfer.holes.find((hl)=> {return hl.number == req.body.hole});
+        this_hole.score = req.body.golferScores[g].score;
       }
+      
+      
+      var gs = this_group.groupScores.find((hl)=> {return (hl.number == req.body.hole)})
+      if (!gs) {
+        this_group.groupScores.push({number: req.body.hole, score :req.body.groupScore})  ;
+      } else {
+        gs.score = req.body.groupScore;
+      }
+      
+      
 
       _doc.save((err, post) => {
         if (err) {
