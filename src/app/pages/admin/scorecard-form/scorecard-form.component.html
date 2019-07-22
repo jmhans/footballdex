@@ -26,12 +26,12 @@
   
   <div formArrayName="allScores">
 		<div class="section-container" *ngFor="let ctrl2 of getAllScores(); let g = index">
-			<div class="ui raised segments" [formGroupName]="g">
-				{{ctrl2['controls'].golfer.value.nickname}}
+			<div fxLayout="row" fxLayoutAlign="space-between" class="ui raised segments" [formGroupName]="g">
+				<span fxLayoutAlign="center bottom">{{ctrl2['controls'].golfer.value.nickname}}</span>
 <!--         <mat-form-field class="example-full-width">
           <input matInput type="text" placeholder="Golfer" formControlName="golfer" value="ctrl['controls'].golfer.value">
         </mat-form-field> -->
-        <mat-form-field class="example-full-width">
+        <mat-form-field class="">
           <input matInput type="number" placeholder="Score" formControlName="newScore" class= "right">
         </mat-form-field>
 <!--         <span formArrayName="scores">

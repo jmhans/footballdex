@@ -12,7 +12,7 @@
         <a *ngIf="!auth.loggedIn" (click)="auth.login()">Log In</a>
         <span *ngIf="auth.loggedIn && auth.userProfile">
           
-          <button mat-icon-button [matMenuTriggerFor]="profMenu">{{ auth.userProfile.name.charAt(0) }}</button>
+          <button mat-mini-fab color="accent" [matMenuTriggerFor]="profMenu">{{ auth.userProfile.name.charAt(0) }}</button>
           <mat-menu #profMenu="matMenu">
             <button mat-menu-item>Log out</button>
           </mat-menu>

@@ -12,7 +12,7 @@ import {MatDatepickerModule} from '@angular/material/datepicker';
 import {MatInputModule, MatNativeDateModule, MatAutocompleteModule} from '@angular/material';
 import { MatMenuModule} from '@angular/material/menu';
 import {MatButtonModule} from '@angular/material/button';
-
+import { FlexLayoutModule } from '@angular/flex-layout';
 
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
@@ -92,7 +92,8 @@ import { EditComponent } from './scorecard/edit/edit.component';
     HttpClientModule,
     AuthModule.forRoot(),
      MatMenuModule,
-    MatButtonModule
+    MatButtonModule,
+    FlexLayoutModule
     
   ],
   providers: [
