@@ -1,0 +1,45 @@
+
+<form [formGroup]="dataForm" (ngSubmit)="onSubmit()">
+
+  <a [routerLink]="[]" [queryParams]="{ tab: 'enterScores', hole: previousHole()}">
+  <i class="material-icons">chevron_left</i></a> Hole {{dataForm.get('hole').value}} of 18
+  <!--     <mat-form-field class="example-full-width">
+        <input type="number" placeholder="Hole" class="form-control" aria-label="Hole" matInput formControlName="hole">
+      </mat-form-field> -->
+  <a [routerLink]="[]" [queryParams]="{ tab: 'enterScores', hole: nextHole()}" ><i class="material-icons">
+    chevron_right</i></a>
+  <span *ngIf="dataForm.get('group').value"> {{dataForm.get('group').value.groupTitle}}</span>
+  
+  
+  <div class="form-group">
+      <mat-form-field class="">
+          <input matInput type="number" placeholder="Score" formControlName="score" class= "right">
+        </mat-form-field>
+  </div>
+
+
+  <!-- Submit -->
+  <div class="form-group">
+    <button
+      type="submit"
+      class="btn btn-primary"
+      [attr.disabled]="dataForm.invalid || submitting ? true : null"
+      [innerText]="submitBtnText"></button>
+      <!-- https://github.com/angular/angular/issues/11271#issuecomment-289806196 -->
+    <app-submitting *ngIf="submitting"></app-submitting>
+    <a
+      *ngIf="!submitting"
+      class="btn btn-link"
+      (click)="resetForm()"
+      tabindex="0">Reset Form</a>
+
+    <!-- API submission error -->
+    <p *ngIf="error" class="mt-3 alert alert-danger">
+      <strong>Error:</strong> There was a problem submitting the information. Please try again.
+    </p>
+  </div>
+</form>
+
+
+
+

@@ -1,0 +1,53 @@
+<!-- src/app/pages/event/event.component.html -->
+
+
+<ng-template [ngIf]="utils.isLoaded(loading)">
+  <h1 class="text-center">{{ pageTitle }}</h1>
+  <!-- Event -->
+  <ng-template [ngIf]="round">
+    <div class="card">
+      <!-- Event tab navigation -->
+      <div class="card-header">
+        <ul class="nav nav-tabs card-header-tabs">
+          <li class="nav-item">
+            <a
+              class="nav-link"
+              [routerLink]="[]"
+              [queryParams]="{ tab: 'details' }"
+              [ngClass]="{ 'active': utils.tabIs(tab, 'details') }">Details</a>
+          </li>
+          <li class="nav-item">
+            <a
+              class="nav-link"
+              [routerLink]="[]"
+              [queryParams]="{ tab: 'enterScores' }"
+              [ngClass]="{ 'active': utils.tabIs(tab, 'enterScores') }">Enter Scores</a>
+          </li>
+        </ul>
+      </div>
+<!--       <div *ngIf="utils.tabIs(tab, 'details')">
+        {{round | json}}
+      </div> -->
+      <app-sgg-details
+        *ngIf="utils.tabIs(tab, 'details')"
+        [round]="round"></app-sgg-details>
+      <app-sgg-scores
+        *ngIf="utils.tabIs(tab, 'enterScores')"
+        (scoreSubmitted)="submitScores($event)"
+        [groups]="round.groups"
+        [holes]="_getHoles()"                    
+                      ></app-sgg-scores>
+      <!-- Round Details -->
+
+      
+      
+    </div>
+  </ng-template>
+
+  <!-- Error loading events -->
+  <p *ngIf="error" class="alert alert-danger">
+    <strong>Oops!</strong> There was an error retrieving information for this round.
+  </p>
+</ng-template>
+
+

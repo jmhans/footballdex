@@ -8,8 +8,12 @@ import { AdminComponent } from './pages/admin/admin.component';
 import { GolferComponent } from './pages/golfer/golfer.component';
 
 import { CreateRoundComponent } from './pages/admin/create-round/create-round.component';
+import { EditRoundComponent } from './pages/admin/edit-round/edit-round.component';
 import { RoundComponent } from './pages/rounds/round/round.component';
 import { RoundsComponent } from './pages/rounds/rounds.component';
+
+import { SimpleGroupGameComponent } from './pages/simple-group-game/simple-group-game.component';
+
 
 const routes: Routes = [
   {
@@ -20,9 +24,12 @@ const routes: Routes = [
     path: 'callback',
     component: CallbackComponent
   }, 
-  {path: 'admin', canActivate: [ AuthGuard, AdminGuard ], children: [ { path: '', component: AdminComponent }]}, 
+  {path: 'admin', canActivate: [ AuthGuard, AdminGuard ], children: [ { path: '', component: AdminComponent }, 
+                                                                      { path: 'round/:id', component: EditRoundComponent}
+                                                                    ]}, 
   {path: 'golfer', canActivate: [ AuthGuard ], children: [{ path: ':id', component: GolferComponent }]},
   {path: 'round', canActivate: [ AuthGuard ], children: [{ path: ':id', component: RoundComponent}]}, 
+  {path: 'groupgame', canActivate: [ AuthGuard ], children: [{ path: ':id', component: SimpleGroupGameComponent}]},
   {path: 'create', canActivate: [ AuthGuard, AdminGuard], children: [ {path: 'round', component: CreateRoundComponent}]},
   {path: 'rounds', canActivate: [ AuthGuard] ,component: RoundsComponent}
   

@@ -4,7 +4,8 @@ class RoundModel {
     public description: string,
     public groups: any[],
     public date: Date,
-    public course: any, 
+    public course: any,
+    public score_type: string,
     public _id?: string
   ) { }
 }
@@ -14,7 +15,8 @@ class FormRoundModel {
     public description: string,
     public groups: any[],
     public date: Date,
-    public course: any, 
+    public course: any,
+    public score_type: string
   ) { }
 }
 

@@ -71,6 +71,25 @@ export class ApiService {
         catchError((error) => this._handleError(error))
       );
   }
+  
+  postScore$(roundId: string, data: any): Observable <any[]> {
+    return this.http
+      .post<any[]>(`${this.base_api}rounds/${roundId}/holescores/${data.group}`,data, {
+        headers: new HttpHeaders().set('Authorization', this._authHeader)
+      })
+      .pipe(
+        catchError((error) => this._handleError(error))
+      );
+  }
+  editScore$(roundId: string, data: any): Observable < any[] > {
+    return this.http
+      .put < any[] > (`${this.base_api}rounds/${roundId}/holescores/${data.holeObj._id}`, data, {
+        headers: new HttpHeaders().set('Authorization', this._authHeader)
+      })
+      .pipe(
+        catchError((error) => this._handleError(error))
+      );
+  }
     
 
   private _handleError(err: HttpErrorResponse | any): Observable<any> {

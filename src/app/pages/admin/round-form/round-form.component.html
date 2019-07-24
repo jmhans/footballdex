@@ -1,27 +1,21 @@
 <!-- src/app/pages/admin/game-form/game-form.component.html -->
 <form [formGroup]="dataForm" (ngSubmit)="onSubmit()">
-  
-    <div class="form-group">
+
+
+<div class="card-body">
+  <h2 class="card-title text-center mb-0">Round Details</h2>
+</div>
+
+<ul class="list-group list-group-flush">
+  <li class="list-group-item">
+    <strong>When:</strong>
       <mat-form-field>
         <input matInput [matDatepicker]="picker" placeholder="Choose a date" formControlName="date">
         <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
         <mat-datepicker #picker></mat-datepicker>
       </mat-form-field>
-    <div
-      *ngIf="formErrors.date"
-      class="small text-danger formErrors"
-      [innerHTML]="formErrors.date">
-    </div>
-  </div>
-  <div class="form-group">
-<!--     <label for="course">Course</label>
-      <input
-            type="text"
-            class="form-control"
-            formControlName="course"
-            id="course"
-            required
-      > -->
+  </li>
+  <li class="list-group-item">
       <mat-form-field class="example-full-width">
         <input type="text" placeholder="Course" aria-label="Course" matInput formControlName="course" [matAutocomplete]="auto">
         <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayCourseFn">
@@ -30,17 +24,10 @@
           </mat-option>
         </mat-autocomplete>
       </mat-form-field>
-    
-    <div
-      *ngIf="formErrors.course"
-      class="small text-danger formErrors"
-      [innerHTML]="formErrors.course">
-    </div>
-  </div>
-  <div class="form-group">
-    <label for="description">Round Description</label>
-
-        <input
+  </li>
+  <li class="list-group-item">
+    <strong>Description:</strong> 
+    <input
       id="description"
       type="text"
       class="form-control"
@@ -51,68 +38,71 @@
       class="small text-danger formErrors"
       [innerHTML]="formErrors.description">
     </div>
-  </div>
-  
-  
-  Groups
-  
-  	<div formArrayName="groups">
-		<div class="section-container" *ngFor="let grp of getGroups(dataForm); let i = index">
-			<div class="ui raised segments" [formGroupName]="i">
-				<h4 class="ui header">Group Details</h4>
-				<input class="form-control" type="text" placeholder="Group Name" formControlName="groupTitle" id="groupTitle">
-				<!-- Question segment -->
-				<!---dataForm Section -->
-				<div class="golfer-container" formArrayName="golfers">
-					<div [formGroupName]="j" *ngFor="let golfer of getGolfers(grp); let j = index">
-            
-<!--             <select id="golferName" formControlName="golferName">
-              <option *ngFor="let g of filteredGolfers" [ngValue]="g"> {{g.nickname}}</option>
-            </select> -->
-            <mat-form-field class="example-full-width">
-              <input type="text" placeholder="Golfer" aria-label="Golfer" matInput formControlName="golferName" id="golferName" [matAutocomplete]="auto" >
-              <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn">
-                <mat-option *ngFor="let g of availableGolfers" [value]="g">
-                  {{g.nickname}}
-                </mat-option>
-              </mat-autocomplete>
-            </mat-form-field>
-            
-<!-- 						<input type="text" class="form-control" placeholder="Untitled Question" formControlName="golferName"> -->
-
-            <mat-form-field class="example-full-width">
+  </li>
+    <li class="list-group-item">
+      <mat-form-field class="example-full-width">
+        <mat-label>Scoring Type</mat-label>
+        <select matNativeControl required formControlName="score_type" >
+          <option value="Best Ball">Best Ball</option>
+          <option value="Scramble">Scramble</option>
+        </select>
+      </mat-form-field>
+  </li>
+  <li class="list-group-item">
+    <strong>Groups:</strong>
+      <mat-accordion formArrayName="groups">
+        <mat-expansion-panel  [formGroupName]="i" *ngFor="let grp of getGroups(dataForm); let i = index">
+          <mat-expansion-panel-header>
+            <mat-panel-title>
+              <mat-form-field class="example-full-width">
+                <strong><input type="text" placeholder="Group Title" aria-label="Group Title" matInput formControlName="groupTitle" id="groupTitle"></strong>
+              </mat-form-field>         
+              <button mat-button type="button" color="warn" (click)="removeGroup(i)">
+                <mat-icon>cancel</mat-icon>
+              </button>
+            </mat-panel-title>
+      <!--       <mat-panel-description>
+              Type your name and age
+            </mat-panel-description> -->
+          </mat-expansion-panel-header>
+          <ul class="list-group list-group-flush" formArrayName="golfers">
+            <li class="list-group-item" *ngFor="let golfer of getGolfers(grp); let j = index"  [formGroupName]="j">
+              <mat-form-field class="example-full-width">
+                <input type="text" placeholder="Golfer" aria-label="Golfer" matInput formControlName="golferName" id="golferName" [matAutocomplete]="auto" >
+                <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn">
+                  <mat-option *ngFor="let g of availableGolfers" [value]="g">
+                    {{g.nickname}}
+                  </mat-option>
+                </mat-autocomplete>
+              </mat-form-field>
+              <mat-form-field class="example-full-width">
                 <mat-label>Tee</mat-label>
                 <mat-select formControlName="golferTee">
                   <mat-option *ngFor="let t of getTees()" [value]="t">
                     {{t.name}}
                   </mat-option>
                 </mat-select>
-            </mat-form-field>
+              </mat-form-field>
             <mat-form-field class="example-full-width">
               <input matInput placeholder="Strokes" type=number value=0 formControlName="golferHandicap">
             </mat-form-field>
-            
+              <button mat-button type="button" color="warn" (click)="removeGolfer(i)">
+                <mat-icon>cancel</mat-icon>
+              </button>
+            </li>
+          </ul>
+          <button mat-button type="button" color="primary"  (click)="addGolfer(i)">
+            <mat-icon>person_add</mat-icon>
+          </button>
+        </mat-expansion-panel>
+          <button mat-button type="button" color="primary"  (click)="addGroup()" >
+            <mat-icon>group_add</mat-icon>
+          </button>
+      </mat-accordion>
+     
+  </li>
+</ul>
 
-              <div *ngIf="dataForm.errors" class="alert alert-danger">
-                {{ dataForm.errors }}
-              </div>
-
-            <button class="btn btn-danger btn-xs" 
-              type="button"
-              (click)="removeGolfer(i)">Remove Golfer</button>
-					</div>
-            <button class="btn btn-success" 
-              type="button"
-              (click)="addGolfer(i)">Add Golfer</button>
-				</div>
-				<!-- End Question -->
-
-			</div>
-			<span *ngIf="getGroups(dataForm).length > 1" (click)="removeGroup(i)" class="btn btn-danger">Remove Group</span>
-		</div>
-      <button type="button" (click)="addGroup()" class="btn btn-success">Add Group </button>
-			
-	</div>
 
   <!-- Submit -->
   <div class="form-group">

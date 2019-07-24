@@ -1,4 +1,4 @@
-import { BrowserModule , Title } from '@angular/platform-browser';
+import { BrowserModule , Title, DomSanitizer } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { AuthModule } from './auth/auth.module';
 
@@ -8,11 +8,13 @@ import {MatTableModule} from '@angular/material/table';
 import {MatPaginatorModule} from '@angular/material/paginator';
 import {MatSortModule} from '@angular/material/sort';
 import {MatFormFieldModule} from '@angular/material';
+import { MatIconRegistry, MatIconModule } from '@angular/material';
 import {MatDatepickerModule} from '@angular/material/datepicker';
 import {MatInputModule, MatNativeDateModule, MatAutocompleteModule} from '@angular/material';
 import { MatMenuModule} from '@angular/material/menu';
 import {MatButtonModule} from '@angular/material/button';
 import { FlexLayoutModule } from '@angular/flex-layout';
+import {MatExpansionModule} from '@angular/material/expansion';
 
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
@@ -47,6 +49,11 @@ import { RoundComponent } from './pages/rounds/round/round.component';
 import { RoundDetailsComponent } from './pages/rounds/round/round-details/round-details.component';
 import { ScorecardComponent } from './scorecard/scorecard.component';
 import { EditComponent } from './scorecard/edit/edit.component';
+import { EditRoundComponent } from './pages/admin/edit-round/edit-round.component';
+import { SimpleGroupGameComponent } from './pages/simple-group-game/simple-group-game.component';
+import { SggDetailsComponent } from './pages/simple-group-game/sgg-details/sgg-details.component';
+import { SggScoresComponent } from './pages/simple-group-game/sgg-scores/sgg-scores.component';
+import { SimpleScoreFormComponent } from './pages/admin/simple-score-form/simple-score-form.component';
 
 
 @NgModule({
@@ -70,7 +77,12 @@ import { EditComponent } from './scorecard/edit/edit.component';
     RoundComponent,
     RoundDetailsComponent,
     ScorecardComponent,
-    EditComponent
+    EditComponent,
+    EditRoundComponent,
+    SimpleGroupGameComponent,
+    SggDetailsComponent,
+    SggScoresComponent,
+    SimpleScoreFormComponent
   ],
   imports: [
     BrowserModule,
@@ -93,7 +105,9 @@ import { EditComponent } from './scorecard/edit/edit.component';
     AuthModule.forRoot(),
      MatMenuModule,
     MatButtonModule,
-    FlexLayoutModule
+    FlexLayoutModule,
+    MatIconModule,
+    MatExpansionModule
     
   ],
   providers: [
@@ -106,4 +120,5 @@ import { EditComponent } from './scorecard/edit/edit.component';
   ],
   bootstrap: [AppComponent]
 })
-export class AppModule { }
+export class AppModule { 
+}

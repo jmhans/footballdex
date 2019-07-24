@@ -66,6 +66,82 @@ _populatedGetOne(req, res, next) {
     })
     
   }
+    _updateHoleScores (req, res, next) {
+    //assumes [{golfer: {}, score: 2, hole: 3}]
+
+    var query = { "groups.groupScores.holes._id": req.params.holeId};
+      
+    var findGroupWithHole= (holeId, grps)=> {
+      
+      for (var g=0; g<grps.length; g++) {
+        var found = grps[g].groupScores.find((gs)=> {return gs.hole._id == holeId})
+        if (found) {
+          return found;
+        }
+      }
+      return null;
+    }
+      
+      
+    
+    this.model.findById(req.params.id).exec((err, _doc)=> {
+      var this_group = findGroupWithHole(req.params.holeId, _doc.groups)
+      var gs = this_group.groupScores.find((hl)=> {return (hl.number == req.body.hole)})
+      if (!gs) {
+        this_group.groupScores.push({number: req.body.hole, score :req.body.groupScore})  ;
+      } else {
+        gs.score = req.body.groupScore;
+      }
+      
+      
+
+      _doc.save((err, post) => {
+        if (err) {
+          console.log(err)
+          }
+
+        res.json(post)
+      })
+
+    })
+    
+  }
+  
+      _createHoleScore (req, res, next) {
+    //assumes [{golfer: {}, score: 2, hole: 3}]
+
+    var query = { "groups._id": req.params.group};
+      
+    console.log(req.params)
+    
+    this.model.findById(req.params.id).exec((err, _doc)=> {
+      var this_group =  _doc.groups.find((grp)=> {return grp._id == req.params.groupId})
+      
+      console.log(this_group)
+      var gs = this_group.groupScores.find((hl)=> {return (hl.number == req.body.hole)})
+      console.log(gs)
+      if (!gs) {
+        console.log({number: req.body.hole, par: req.body.par, net_score :req.body.groupScore})
+        this_group.groupScores.push({number: req.body.hole, par: req.body.par, net_score :req.body.groupScore})  ;
+      } else {
+        gs.net_score = req.body.groupScore;
+      }
+      
+      
+
+      _doc.save((err, post) => {
+        if (err) {
+          console.log(err)
+          }
+
+        res.json(post)
+      })
+
+    })
+    
+  }
+  
+  
   
   
   
@@ -78,6 +154,8 @@ _populatedGetOne(req, res, next) {
     router.put('/' + this.routeString + '/:id', (...args) => this._update(...args));
     router.delete('/' + this.routeString + '/:id', (...args) => this._delete(...args));
     router.put('/' + this.routeString + '/:id/scores/:grp', (...args) => this._updateScores(...args));
+    router.put('/' + this.routeString + '/:id/holescores/:holeId', (...args) => this._updateHoleScores(...args));
+    router.post('/' + this.routeString + '/:id/holescores/:groupId', (...args) => this._createHoleScore(...args));
     return router;
   }
 }

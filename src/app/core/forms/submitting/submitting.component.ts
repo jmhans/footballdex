@@ -4,7 +4,7 @@ import { Component } from '@angular/core';
 @Component({
   selector: 'app-submitting',
   template: `
-    <img src="/assets/images/loading.svg">
+    Loading
   `,
   styles: [`
     :host {

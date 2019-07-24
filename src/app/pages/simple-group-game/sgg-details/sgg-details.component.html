@@ -1,0 +1,50 @@
+<div class="card-body">
+  <h2 class="card-title text-center mb-0">Round Details</h2>
+</div>
+
+<ul class="list-group list-group-flush">
+  <li class="list-group-item">
+    <strong>When:</strong>{{ round.date }}
+  </li>
+  <li class="list-group-item">
+    <strong>Course:</strong> {{round.course.name}}
+  </li>
+  <li class="list-group-item">
+    <strong>Description:</strong> {{round.description}}
+  </li>
+  <li class="list-group-item">
+    <strong>Scoring Type:</strong> Best Ball
+  </li>
+  <li class="list-group-item">
+    <strong>Groups:</strong>
+      <mat-accordion>
+        <mat-expansion-panel *ngFor="let group of round.groups">
+          <mat-expansion-panel-header>
+            <mat-panel-title>
+              <strong>{{group.groupTitle}}</strong>             
+              <a
+                [routerLink]="[]"
+                [queryParams]="{ tab: 'enterScores', groupId: group._id, hole : 4 }" class="right">Enter Scores</a>
+            </mat-panel-title>
+      <!--       <mat-panel-description>
+              Type your name and age
+            </mat-panel-description> -->
+          </mat-expansion-panel-header>
+          <ul class="list-group list-group-flush">
+            <li class="list-group-item" *ngFor="let golfer of group.scorecards">
+              {{golfer.golfer.nickname}} <small>(Handicap: {{golfer.handicap_strokes}})</small>
+            </li>
+          </ul>
+        </mat-expansion-panel>
+      </mat-accordion>
+     
+  </li>
+</ul>
+
+
+<div *ngIf="auth.isAdmin" class="card-footer text-right small">
+  <!-- To do: create an /admin/game/update route and service -->
+  <a [routerLink]="['/admin/round', round._id]">Edit</a>
+</div>
+
+

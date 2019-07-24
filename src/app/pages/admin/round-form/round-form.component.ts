@@ -89,10 +89,11 @@ export class RoundFormComponent implements OnInit, OnDestroy {
     this.isEdit = !!this.round;
     this.submitBtnText = this.isEdit ? 'Update Data' : 'Create Data';
     // Set initial form data
-    this.formObj = this._setFormObj();
+
     // Use FormBuilder to construct the form
     this._getAllGolfers();
     this._getCourses();
+    this.formObj = this._setFormObj();
     this._buildForm();
     
 
@@ -144,19 +145,18 @@ export class RoundFormComponent implements OnInit, OnDestroy {
     if (!this.isEdit) {
       // If creating a new Golfer, create new
       // FormGolferModel with default null data
-      return new FormRoundModel(null,[{golfer: 'somename', otherField: 'somevalue'}] /* Create a new 'group' and put in here*/,null, null);
+      return new FormRoundModel(null,[this.initGroupData()] /* Create a new 'group' and put in here*/,null, null, null);
     } else {
       return new FormRoundModel(
         this.round.description,
         this.round.groups, 
         this.round.date, 
-        this.round.course
+        this.round.course,
+        this.round.score_type
       );
     }
   }
 
-
-  
 
   private _buildForm() {
     
@@ -171,10 +171,10 @@ export class RoundFormComponent implements OnInit, OnDestroy {
       course: [this.formObj.course,
         Validators.required
       ], 
-      groups: this.fb.array([
-        this.initGroup(),
-      ]),
+      score_type: [this.formObj.score_type, Validators.required]
     });
+    
+   this.dataForm.addControl('groups',this._createFormGroups());
     
 
 
@@ -210,6 +210,7 @@ export class RoundFormComponent implements OnInit, OnDestroy {
     return this.availableCourses.filter(course => course.name.toLowerCase().includes(filterValue));
   }
   
+
 
   private _onValueChanged() {
     if (!this.dataForm) { return; }
@@ -248,7 +249,8 @@ export class RoundFormComponent implements OnInit, OnDestroy {
       this.dataForm.get('description').value, // Need to think about these - probably need to extract _id from these differently.  
       groupObj,
       this.dataForm.get('date').value,
-      this.dataForm.get('course').value._id,
+      this.dataForm.get('course').value._id, 
+      this.dataForm.get('score_type').value,
       this.round ? this.round._id : null
     );
   }
@@ -271,7 +273,7 @@ export class RoundFormComponent implements OnInit, OnDestroy {
                                            handicap_strokes: golfer.golferHandicap,
                                            tee: golfer.golferTee.name,
                                            holes: golfer.golferTee.holes};})
-    return { groupTitle: grp.groupTitle, scorecards: sc}
+    return { groupTitle: grp.groupTitle, scorecards: sc, groupScores: []};
   }
 
   onSubmit() {
@@ -296,21 +298,61 @@ export class RoundFormComponent implements OnInit, OnDestroy {
   }
   
   
+  _createFormGroups() {
+    if (this.formObj.groups.length>0) {
+      return this.fb.array(this.formObj.groups.map((grp) => this.createGroup(grp))/*[
+        this.initGroup(),
+      ]*/)
+    } else {
+      return this.fb.array([this.initGroup()])
+    }
+  }
+  
+  createGroup(grp) {
+    return this.fb.group({
+      groupTitle: [grp.groupTitle], 
+      golfers: this.fb.array(grp.scorecards.map((sc) => this._createGolfer(sc)))
+    })
+  }
+  
+  initGroupData() {
+    return {groupTitle: '', 
+            scorecards: [this.initScorecard()]
+           }
+  }
+  
+  initScorecard() {
+    return {
+      golfer: '', 
+      handicap_strokes: 0, 
+      tee: ''
+           }
+  }
+  
   
   initGroup() {
-    return this.fb.group({
-      groupTitle: [''],
-      golfers: this.fb.array([
-        this.initGolfer()
-        ])
-    });
+    return this.createGroup(this.initGroupData());
   }
-  initGolfer() {
+  
+  _createGolfer(scorecard) {
     return this.fb.group({
-      golferName: [''],
-      golferHandicap: [0], 
-      golferTee: ['']
-    });
+      golferName: [scorecard.golfer], 
+      golferHandicap: [scorecard.handicap_strokes], 
+      golferTee: [this._translateTee(scorecard.teeName)]
+    })
+  }
+  
+  _translateTee(teeName:string) {
+    if (this.dataForm) {
+      if (this.dataForm.get('course').value) {
+        return this.dataForm.get('course').value.tees.find((t) => {return (t.name == teeName)})
+      }
+    }
+    return teeName;
+  }
+  
+  initGolfer() {
+    return this._createGolfer(this.initScorecard());
   }
 
   addGroup() {
