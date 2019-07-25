@@ -112,16 +112,12 @@ _populatedGetOne(req, res, next) {
 
     var query = { "groups._id": req.params.group};
       
-    console.log(req.params)
     
     this.model.findById(req.params.id).exec((err, _doc)=> {
       var this_group =  _doc.groups.find((grp)=> {return grp._id == req.params.groupId})
       
-      console.log(this_group)
       var gs = this_group.groupScores.find((hl)=> {return (hl.number == req.body.hole)})
-      console.log(gs)
       if (!gs) {
-        console.log({number: req.body.hole, par: req.body.par, net_score :req.body.groupScore})
         this_group.groupScores.push({number: req.body.hole, par: req.body.par, net_score :req.body.groupScore})  ;
       } else {
         gs.net_score = req.body.groupScore;

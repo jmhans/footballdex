@@ -1,15 +1,15 @@
 
 <form [formGroup]="dataForm" (ngSubmit)="onSubmit()">
 
-  <a [routerLink]="[]" [queryParams]="{ tab: 'enterScores', hole: previousHole()}">
+  <a [routerLink]="[]" [queryParams]="{ tab: 'enterScores', groupId: groupId, hole: previousHole()}">
   <i class="material-icons">chevron_left</i></a> Hole {{dataForm.get('hole').value}} of 18
   <!--     <mat-form-field class="example-full-width">
         <input type="number" placeholder="Hole" class="form-control" aria-label="Hole" matInput formControlName="hole">
       </mat-form-field> -->
-  <a [routerLink]="[]" [queryParams]="{ tab: 'enterScores', hole: nextHole()}" ><i class="material-icons">
+  <a [routerLink]="[]" [queryParams]="{ tab: 'enterScores', groupId: groupId, hole: nextHole()}" ><i class="material-icons">
     chevron_right</i></a>
   <span *ngIf="dataForm.get('group').value"> {{dataForm.get('group').value.groupTitle}}</span>
-  
+  <span >{{group.scorecards | json}}</span>
   
   <div class="form-group">
       <mat-form-field class="">

@@ -32,7 +32,7 @@
           </mat-expansion-panel-header>
           <ul class="list-group list-group-flush">
             <li class="list-group-item" *ngFor="let golfer of group.scorecards">
-              {{golfer.golfer.nickname}} <small>(Handicap: {{golfer.handicap_strokes}})</small>
+              <span *ngIf="golfer">{{golfer.golfer.nickname}} <small>(Handicap: {{golfer.handicap_strokes}})</small></span>
             </li>
           </ul>
         </mat-expansion-panel>

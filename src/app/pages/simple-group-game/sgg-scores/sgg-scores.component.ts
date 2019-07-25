@@ -79,8 +79,11 @@ export class SggScoresComponent implements OnInit, OnDestroy {
   
   _getNextHole() {
     for (var h=1; h<=18; h++) {
-      if (!(this.group.groupScores['holes'].find((hl)=>{return (hl.number==h);}).net_score)) {
-        return h
+      var this_hole = this.group.groupScores.find((hl)=>{return (hl.number==h);})
+      if (this_hole) {
+        if(this_hole.net_score) {
+          return h;
+        }
       }
     }
     return 1;
@@ -121,7 +124,10 @@ export class SggScoresComponent implements OnInit, OnDestroy {
   getGroupHoleScore() {
     if (this.group) {
       if (this.group.groupScores) {
-        return (this.group.groupScores.find((hl) => {return (hl.number == this.hole);}).score) || null    
+        var this_hole= (this.group.groupScores.find((hl) => {return (hl.number == this.hole);}))
+          if (this_hole) {
+            return this_hole.net_score || null;
+          }
       }
     }
       

@@ -270,9 +270,9 @@ export class RoundFormComponent implements OnInit, OnDestroy {
     var courseTees = this.dataForm.get('course').value.tees;
     
     var sc = grp.golfers.map((golfer) => { return { golfer: golfer.golferName._id, 
-                                           handicap_strokes: golfer.golferHandicap,
-                                           tee: golfer.golferTee.name,
-                                           holes: golfer.golferTee.holes};})
+                                           handicap_strokes: golfer.golferHandicap || 0,
+                                           tee: golfer.golferTee.name || '',
+                                           holes: golfer.golferTee.holes || []}});
     return { groupTitle: grp.groupTitle, scorecards: sc, groupScores: []};
   }
 
