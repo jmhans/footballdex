@@ -14,7 +14,7 @@
           
           <button mat-mini-fab color="accent" [matMenuTriggerFor]="profMenu">{{ auth.userProfile.name.charAt(0) }}</button>
           <mat-menu #profMenu="matMenu">
-            <button mat-menu-item>Log out</button>
+            <button mat-menu-item (click)="auth.logout()">Log out</button>
           </mat-menu>
 <!--           <span class="divider">|</span>
           <a (click)="auth.logout()">Log Out</a> -->

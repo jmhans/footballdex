@@ -52,6 +52,7 @@ _populatedGetOne(req, res, next) {
       } else {
         gs.score = req.body.groupScore;
       }
+
       
       
 
@@ -88,13 +89,20 @@ _populatedGetOne(req, res, next) {
       var this_group = findGroupWithHole(req.params.holeId, _doc.groups)
       var gs = this_group.groupScores.find((hl)=> {return (hl.number == req.body.hole)})
       if (!gs) {
-        this_group.groupScores.push({number: req.body.hole, score :req.body.groupScore})  ;
+        this_group.groupScores.push({number: req.body.hole, net_score :req.body.groupScore})  ;
       } else {
-        gs.score = req.body.groupScore;
-      }
+        gs = {number: req.body.hole, par: req.body.par, net_score: req.body.groupScore};
+        console.log(gs);
+      } 
       
-      
+      this_group.totalScore = this_group.groupScores.reduce((retObj, curVal)=> {
+        retObj.total += curVal.net_score - curVal.par;
+        retObj.thru = Math.max(curVal.number,  retObj.thru);
+        return retObj;
+      }, 
+      {total: 0, thru:0});
 
+            console.log(this_group.totalScore);
       _doc.save((err, post) => {
         if (err) {
           console.log(err)
@@ -120,9 +128,19 @@ _populatedGetOne(req, res, next) {
       if (!gs) {
         this_group.groupScores.push({number: req.body.hole, par: req.body.par, net_score :req.body.groupScore})  ;
       } else {
-        gs.net_score = req.body.groupScore;
+        gs = {number: req.body.hole, par: req.body.par, net_score: req.body.groupScore};
+
       }
       
+      this_group.totalScore = this_group.groupScores.reduce((retObj, curVal)=> {
+        console.log(curVal);
+        console.log(retObj);
+        retObj.total += ((curVal.net_score || 0) - (curVal.par || 0));
+        retObj.thru = Math.max((curVal.number || 0),  (retObj.thru || 1));
+        return retObj;
+      }, 
+      {total: 0, thru:0});
+            console.log(this_group.totalScore);
       
 
       _doc.save((err, post) => {

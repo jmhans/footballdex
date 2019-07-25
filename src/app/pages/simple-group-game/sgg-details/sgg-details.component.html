@@ -21,15 +21,22 @@
         <mat-expansion-panel *ngFor="let group of round.groups">
           <mat-expansion-panel-header>
             <mat-panel-title>
-              <strong>{{group.groupTitle}}</strong>             
+              <strong mat-grid-list cols="4">{{group.groupTitle}}</strong>             
+              <span mat-grid-list cols="4">
+                Total: {{group.totalScore.total}} | 
+                Thru {{group.totalScore.thru}}
+              </span>              
               <a
-                [routerLink]="[]"
-                [queryParams]="{ tab: 'enterScores', groupId: group._id, hole : 4 }" class="right">Enter Scores</a>
+                 mat-grid-list cols="4"
+                 [routerLink]="[]"
+                  [queryParams]="{ tab: 'enterScores', groupId: group._id, hole : (group.totalScore.thru + 1) }" class="right">Enter Scores</a>
+            
             </mat-panel-title>
       <!--       <mat-panel-description>
               Type your name and age
             </mat-panel-description> -->
           </mat-expansion-panel-header>
+          
           <ul class="list-group list-group-flush">
             <li class="list-group-item" *ngFor="let golfer of group.scorecards">
               <span *ngIf="golfer">{{golfer.golfer.nickname}} <small>(Handicap: {{golfer.handicap_strokes}})</small></span>

@@ -18,7 +18,8 @@ const holeScoreSchema = new Schema({
 const groupSchema = new Schema({
     groupTitle: {type: String, required: false},
     scorecards: {type: [scorecardSchema]},
-    groupScores: {type: [holeScoreSchema]}
+    groupScores: {type: [holeScoreSchema]},
+    totalScore: { type: {total: Number, thru: Number}}
 })
 
 const roundSchema = new Schema({

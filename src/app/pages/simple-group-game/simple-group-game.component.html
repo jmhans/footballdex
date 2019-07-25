@@ -17,11 +17,10 @@
               [ngClass]="{ 'active': utils.tabIs(tab, 'details') }">Details</a>
           </li>
           <li class="nav-item">
-            <a
+            <span
               class="nav-link"
               [routerLink]="[]"
-              [queryParams]="{ tab: 'enterScores' }"
-              [ngClass]="{ 'active': utils.tabIs(tab, 'enterScores') }">Enter Scores</a>
+              [ngClass]="{ 'active': utils.tabIs(tab, 'enterScores') }">Enter Scores</span>
           </li>
         </ul>
       </div>

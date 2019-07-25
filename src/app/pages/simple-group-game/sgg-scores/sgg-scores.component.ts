@@ -101,8 +101,8 @@ export class SggScoresComponent implements OnInit, OnDestroy {
           if (_this.groupId != '') {
             _this.group = _this.groups.find((grp) => {return grp._id == _this.groupId});
             
-            if(_this.group['groupScores']['holes']) {
-              _this.holeObj = _this.group.groupScores['holes'].find((hl) => {return (hl.number == parseInt(queryParams['hole']))})  
+            if(_this.group['groupScores']) {
+              _this.holeObj = _this.group.groupScores.find((hl) => {return (hl.number == parseInt(queryParams['hole']))})  
             }  
         }
         _this.hole = parseInt(queryParams['hole']) || this._getNextHole();

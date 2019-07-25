@@ -9,7 +9,7 @@
   <a [routerLink]="[]" [queryParams]="{ tab: 'enterScores', groupId: groupId, hole: nextHole()}" ><i class="material-icons">
     chevron_right</i></a>
   <span *ngIf="dataForm.get('group').value"> {{dataForm.get('group').value.groupTitle}}</span>
-  <span >{{group.scorecards | json}}</span>
+
   
   <div class="form-group">
       <mat-form-field class="">
