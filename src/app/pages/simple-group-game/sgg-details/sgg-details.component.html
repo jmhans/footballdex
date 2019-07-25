@@ -21,15 +21,18 @@
         <mat-expansion-panel *ngFor="let group of round.groups">
           <mat-expansion-panel-header>
             <mat-panel-title>
-              <strong mat-grid-list cols="4">{{group.groupTitle}}</strong>             
-              <span mat-grid-list cols="4">
+              <strong fxFlex="20%">{{group.groupTitle}}</strong>
+              
+              <span  fxFlex="60%">
                 Total: {{group.totalScore.total}} | 
                 Thru {{group.totalScore.thru}}
               </span>              
-              <a
-                 mat-grid-list cols="4"
+               <a
+                  fxFlex="20%"
+                               mat-grid-list cols="4"
                  [routerLink]="[]"
                   [queryParams]="{ tab: 'enterScores', groupId: group._id, hole : (group.totalScore.thru + 1) }" class="right">Enter Scores</a>
+              
             
             </mat-panel-title>
       <!--       <mat-panel-description>
