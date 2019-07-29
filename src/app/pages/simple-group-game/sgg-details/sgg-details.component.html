@@ -23,7 +23,7 @@
             <mat-panel-title>
               <strong fxFlex="20%">{{group.groupTitle}}</strong>
               
-              <span  fxFlex="60%">
+              <span  fxFlex="60%" *ngIf="group.totalScore">
                 Total: {{group.totalScore.total}} | 
                 Thru {{group.totalScore.thru}}
               </span>              
