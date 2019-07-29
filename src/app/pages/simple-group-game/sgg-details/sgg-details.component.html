@@ -31,7 +31,7 @@
                   fxFlex="20%"
                                mat-grid-list cols="4"
                  [routerLink]="[]"
-                  [queryParams]="{ tab: 'enterScores', groupId: group._id, hole : (group.totalScore.thru + 1) }" class="right">Enter Scores</a>
+                  [queryParams]="{ tab: 'enterScores', groupId: group._id, hole : ((group.totalScore.thru || 0) + 1) }" class="right">Enter Scores</a>
               
             
             </mat-panel-title>
