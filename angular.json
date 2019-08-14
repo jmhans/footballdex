@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "heroku-quick-start": {
+    "footballdex": {
       "root": "",
       "sourceRoot": "src",
       "projectType": "application",
@@ -61,18 +61,18 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "heroku-quick-start:build"
+            "browserTarget": "footballdex:build"
           },
           "configurations": {
             "production": {
-              "browserTarget": "heroku-quick-start:build:production"
+              "browserTarget": "footballdex:build:production"
             }
           }
         },
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "heroku-quick-start:build"
+            "browserTarget": "footballdex:build"
           }
         },
         "test": {
@@ -106,7 +106,7 @@
         }
       }
     },
-    "heroku-quick-start-e2e": {
+    "footballdex-e2e": {
       "root": "e2e/",
       "projectType": "application",
       "prefix": "",
@@ -115,11 +115,11 @@
           "builder": "@angular-devkit/build-angular:protractor",
           "options": {
             "protractorConfig": "e2e/protractor.conf.js",
-            "devServerTarget": "heroku-quick-start:serve"
+            "devServerTarget": "footballdex:serve"
           },
           "configurations": {
             "production": {
-              "devServerTarget": "heroku-quick-start:serve:production"
+              "devServerTarget": "footballdex:serve:production"
             }
           }
         },
@@ -135,5 +135,5 @@
       }
     }
   },
-  "defaultProject": "heroku-quick-start"
+  "defaultProject": "footballdex"
 }

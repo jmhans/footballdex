@@ -54,6 +54,7 @@ import { SimpleGroupGameComponent } from './pages/simple-group-game/simple-group
 import { SggDetailsComponent } from './pages/simple-group-game/sgg-details/sgg-details.component';
 import { SggScoresComponent } from './pages/simple-group-game/sgg-scores/sgg-scores.component';
 import { SimpleScoreFormComponent } from './pages/admin/simple-score-form/simple-score-form.component';
+import { TeamOwnersComponent } from './pages/team-owners/team-owners.component';
 
 
 @NgModule({
@@ -82,7 +83,8 @@ import { SimpleScoreFormComponent } from './pages/admin/simple-score-form/simple
     SimpleGroupGameComponent,
     SggDetailsComponent,
     SggScoresComponent,
-    SimpleScoreFormComponent
+    SimpleScoreFormComponent,
+    TeamOwnersComponent
   ],
   imports: [
     BrowserModule,

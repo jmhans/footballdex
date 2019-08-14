@@ -7,18 +7,12 @@ router.use(function timeLog(req, res, next) {
   next();
 });
 
-var GolfersController = require('../controllers/golfers.controller');
-var RoundController = require('../controllers/round.controller');
-var GroupController = require('../controllers/group.controller');
-var ScorecardController = require('../controllers/scorecard.controller');
-var CourseController = require('../controllers/course.controller');
 
+var RFAController = require('../controllers/rfa.controller').RFA;
+var TeamOwnerController = require('../controllers/rfa.controller').TeamOwner;
 
-router.use(new GolfersController().route());
-router.use(new RoundController().route());
-router.use(new GroupController().route());
-router.use(new ScorecardController().route());
-router.use(new CourseController().route());
+router.use(new RFAController().route());
+router.use(new TeamOwnerController().route());
 
 
 module.exports = router;
