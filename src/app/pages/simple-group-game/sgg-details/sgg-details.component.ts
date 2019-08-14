@@ -18,6 +18,17 @@ export class SggDetailsComponent implements OnInit {
 
   ngOnInit() {
   }
+  
+  
+  getNextHole(grp) {
+    if (!grp) {
+      return 1
+    }
+    if (!grp.totalScore) {
+      return 1
+    }
+    return grp.totalScore.thru + 1 || 1
+  }
 
 }
 

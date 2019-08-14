@@ -264,15 +264,23 @@ export class RoundFormComponent implements OnInit, OnDestroy {
   }
   
   
+  private _getGolferSubmitObj(golfer) {
+    
+      return { 
+        golfer: golfer.golferName._id,
+        handicap_strokes: golfer.golferHandicap || 0,
+        tee: golfer.golferTee.name || '',
+        holes: golfer.golferTee.holes || []
+             }      
+        
+  }
+  
   
   private _getGroupSubmitObj(grp) {
     
     var courseTees = this.dataForm.get('course').value.tees;
     
-    var sc = grp.golfers.map((golfer) => { return { golfer: golfer.golferName._id, 
-                                           handicap_strokes: golfer.golferHandicap || 0,
-                                           tee: golfer.golferTee.name || '',
-                                           holes: golfer.golferTee.holes || []}});
+    var sc = grp.golfers.map((golfer) => this._getGolferSubmitObj(golfer));
     return { groupTitle: grp.groupTitle, scorecards: sc, groupScores: []};
   }
 
@@ -338,7 +346,7 @@ export class RoundFormComponent implements OnInit, OnDestroy {
     return this.fb.group({
       golferName: [scorecard.golfer], 
       golferHandicap: [scorecard.handicap_strokes], 
-      golferTee: [this._translateTee(scorecard.teeName)]
+      golferTee: [this._translateTee(scorecard.tee)]
     })
   }
   
@@ -348,7 +356,7 @@ export class RoundFormComponent implements OnInit, OnDestroy {
         return this.dataForm.get('course').value.tees.find((t) => {return (t.name == teeName)})
       }
     }
-    return teeName;
+    return {name: '', holes: []};
   }
   
   initGolfer() {
