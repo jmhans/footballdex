@@ -1,0 +1,18 @@
+<div class="card-body">
+  <h2 class="card-title text-center mb-0">Owner Details</h2>
+</div>
+
+<ul class="list-group list-group-flush">
+  <li class="list-group-item">
+    <strong>Name:</strong>{{ teamOwner.name }}
+  </li>
+  <li class="list-group-item">
+    <strong>Team:</strong> {{teamOwner.teamname}}
+  </li>
+</ul>
+
+<div *ngIf="auth.isAdmin" class="card-footer text-right small">
+  <!-- To do: create an /admin/game/update route and service -->
+  <a [routerLink]="['/admin/teamOwner', teamOwner._id]">Edit</a>
+</div>
+

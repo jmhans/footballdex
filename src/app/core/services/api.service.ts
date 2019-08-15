@@ -42,9 +42,9 @@ export class ApiService {
   }
   
      // POST new game (admin only)
-  postData$(model: string, data: any[]): Observable<any[]> {
+  postData$(model: string, data: any): Observable<any> {
     return this.http
-      .post<any[]>(`${this.base_api}${model}`,data, {
+      .post<any>(`${this.base_api}${model}`,data, {
         headers: new HttpHeaders().set('Authorization', this._authHeader)
       })
       .pipe(
@@ -52,9 +52,9 @@ export class ApiService {
       );
   }
   
-  editData$(model: string, id: string, data: any[]): Observable<any[]> {
+  editData$(model: string, id: string, data: any): Observable<any> {
     return this.http
-      .put<any[]>(`${this.base_api}${model}/${id}`,data, {
+      .put<any>(`${this.base_api}${model}/${id}`,data, {
         headers: new HttpHeaders().set('Authorization', this._authHeader)
       })
       .pipe(

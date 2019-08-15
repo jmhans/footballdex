@@ -5,15 +5,11 @@ import { CallbackComponent } from './pages/callback/callback.component';
 import { AuthGuard } from './auth/auth.guard';
 import { AdminGuard } from './auth/admin.guard';
 import { AdminComponent } from './pages/admin/admin.component';
-import { GolferComponent } from './pages/golfer/golfer.component';
 
-import { CreateRoundComponent } from './pages/admin/create-round/create-round.component';
-import { EditRoundComponent } from './pages/admin/edit-round/edit-round.component';
-import { RoundComponent } from './pages/rounds/round/round.component';
-import { RoundsComponent } from './pages/rounds/rounds.component';
+import { CreateTeamOwnerComponent } from './pages/admin/create-team-owner/create-team-owner.component';
+import { EditTeamOwnerComponent } from './pages/admin/edit-team-owner/edit-team-owner.component';
 
-import { SimpleGroupGameComponent } from './pages/simple-group-game/simple-group-game.component';
-
+import { TeamOwnerComponent } from './pages/team-owner/team-owner.component';
 
 const routes: Routes = [
   {
@@ -25,15 +21,11 @@ const routes: Routes = [
     component: CallbackComponent
   }, 
   {path: 'admin', canActivate: [ AuthGuard, AdminGuard ], children: [ { path: '', component: AdminComponent }, 
-                                                                      { path: 'round/:id', component: EditRoundComponent}
+                                                                      { path: 'teamOwner/:id', component: EditTeamOwnerComponent }
                                                                     ]}, 
-  {path: 'golfer', canActivate: [ AuthGuard ], children: [{ path: ':id', component: GolferComponent }]},
-  {path: 'round', canActivate: [ AuthGuard ], children: [{ path: ':id', component: RoundComponent}]}, 
-  {path: 'groupgame', canActivate: [ AuthGuard ], children: [{ path: ':id', component: SimpleGroupGameComponent}]},
-  {path: 'create', canActivate: [ AuthGuard, AdminGuard], children: [ {path: 'round', component: CreateRoundComponent}]},
-  {path: 'rounds', canActivate: [ AuthGuard] ,component: RoundsComponent}
-  
-  
+  {path: 'create', canActivate: [ AuthGuard, AdminGuard], children: [ {path: 'teamOwner', component: CreateTeamOwnerComponent}]},
+  {path: 'teamOwner', canActivate: [ AuthGuard], children: [ {path: ':id', component: TeamOwnerComponent}]}
+
 ];
 
 @NgModule({

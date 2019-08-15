@@ -1,0 +1,14 @@
+<!-- src/app/pages/admin/edit-round/edit-round.component.html -->
+<h1 class="text-center">{{ pageTitle }}</h1>
+
+<ng-template [ngIf]="utils.isLoaded(loading)">
+  <ng-template [ngIf]="teamOwner">
+    <!-- Event form -->
+    <app-team-owner-form [teamOwner]="teamOwner"></app-team-owner-form>
+  </ng-template>
+
+  <!-- Error loading event -->
+  <p *ngIf="error" class="alert alert-danger">
+    <strong>Error:</strong> Owner data could not be retrieved. View <a routerLink="/admin" class="alert-link">Team Owners</a>.
+  </p>
+</ng-template>

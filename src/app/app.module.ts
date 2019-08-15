@@ -35,26 +35,13 @@ import { FilterSortService } from './core/services/filter-sort.service';
 
 import { CallbackComponent } from './pages/callback/callback.component';
 import { AdminComponent } from './pages/admin/admin.component';
-import { DataFormComponent } from './pages/admin/data-form/data-form.component';
 import { SubmittingComponent } from './core/forms/submitting/submitting.component';
-import { GolferComponent } from './pages/golfer/golfer.component';
-import { SubadminComponent } from './pages/admin/subadmin/subadmin.component';
-import { CourseFormComponent } from './pages/admin/course-form/course-form.component';
-import { RoundFormComponent } from './pages/admin/round-form/round-form.component';
-import { ScorecardFormComponent } from './pages/admin/scorecard-form/scorecard-form.component';
-import { GroupFormComponent } from './pages/admin/group-form/group-form.component';
-import { CreateRoundComponent } from './pages/admin/create-round/create-round.component';
-import { RoundsComponent } from './pages/rounds/rounds.component';
-import { RoundComponent } from './pages/rounds/round/round.component';
-import { RoundDetailsComponent } from './pages/rounds/round/round-details/round-details.component';
-import { ScorecardComponent } from './scorecard/scorecard.component';
-import { EditComponent } from './scorecard/edit/edit.component';
-import { EditRoundComponent } from './pages/admin/edit-round/edit-round.component';
-import { SimpleGroupGameComponent } from './pages/simple-group-game/simple-group-game.component';
-import { SggDetailsComponent } from './pages/simple-group-game/sgg-details/sgg-details.component';
-import { SggScoresComponent } from './pages/simple-group-game/sgg-scores/sgg-scores.component';
-import { SimpleScoreFormComponent } from './pages/admin/simple-score-form/simple-score-form.component';
 import { TeamOwnersComponent } from './pages/team-owners/team-owners.component';
+import { TeamOwnerFormComponent } from './pages/admin/team-owner-form/team-owner-form.component';
+import { CreateTeamOwnerComponent } from './pages/admin/create-team-owner/create-team-owner.component';
+import { EditTeamOwnerComponent } from './pages/admin/edit-team-owner/edit-team-owner.component';
+import { TeamOwnerComponent } from './pages/team-owner/team-owner.component';
+import { TeamOwnerDetailsComponent } from './pages/team-owner/team-owner-details/team-owner-details.component';
 
 
 @NgModule({
@@ -65,26 +52,13 @@ import { TeamOwnersComponent } from './pages/team-owners/team-owners.component';
     FooterComponent,
     CallbackComponent,
     AdminComponent,
-    DataFormComponent,
     SubmittingComponent,
-    GolferComponent,
-    SubadminComponent,
-    CourseFormComponent,
-    RoundFormComponent,
-    ScorecardFormComponent,
-    GroupFormComponent,
-    CreateRoundComponent,
-    RoundsComponent,
-    RoundComponent,
-    RoundDetailsComponent,
-    ScorecardComponent,
-    EditComponent,
-    EditRoundComponent,
-    SimpleGroupGameComponent,
-    SggDetailsComponent,
-    SggScoresComponent,
-    SimpleScoreFormComponent,
-    TeamOwnersComponent
+    TeamOwnersComponent,
+    TeamOwnerFormComponent,
+    CreateTeamOwnerComponent,
+    EditTeamOwnerComponent,
+    TeamOwnerComponent,
+    TeamOwnerDetailsComponent
   ],
   imports: [
     BrowserModule,

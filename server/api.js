@@ -7,10 +7,6 @@
 
 const jwt = require('express-jwt');
 const jwks = require('jwks-rsa');
-const mlbGame = require('./../models/mlbGame');
-const PropBetsController = require('./../controllers/propBets.controller');
-const golfersController = require('./../controllers/golfers.controller');
-
 
 
 /*
@@ -48,27 +44,7 @@ module.exports = function(app, config) {
  | API Routes
  |--------------------------------------
  */
-  
     
-  app.get("/api/mlbGames", (req, res) => {
-    mlbGame.find({}, (err, games) => {
-      let gamesArr = [];
-      if (err) {
-        return res.status(500).send({message: err.message});
-      }
-      if (games) {
-        games.forEach(game => {
-          gamesArr.push(game);
-        });
-      }
-      res.send(gamesArr);
-    });
-  })
-    
-  app.get('/api/betSummary',PropBetsController._get);
-  
-  
-  
     
   var api = require('../routes/api.route');
   app.use('/api', api);
