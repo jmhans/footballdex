@@ -43,7 +43,7 @@ export class RfaFormComponent implements OnInit, OnDestroy {
   // Set up errors object
   formErrors: any = {
     owner: '',
-    name: '',
+    player: '',
     adv:''
   }
   
@@ -51,7 +51,7 @@ export class RfaFormComponent implements OnInit, OnDestroy {
       owner: {
         required: `Owner is <strong>required</strong>.`
       },
-      name: {
+      player: {
         required: `Name is <strong>required</strong>.`
       }
   }
@@ -92,6 +92,7 @@ export class RfaFormComponent implements OnInit, OnDestroy {
   }
   
 private _getTeamOwnersList() {
+
     this.loading = true;
     // Get future, public events
     this.ownersListSub = this.api
@@ -100,7 +101,9 @@ private _getTeamOwnersList() {
         res => {
           this.owners = res;
           this.loading = false;
-          //this.filteredPlayers = this._getFilteredPlayers();
+          //this.dataForm.patchValue({'owner' : res.filter((o)=> {return o.name == this.rfa['owner']['name']})});
+      //    this.filteredPlayers = this._getFilteredPlayers();
+     //     this.dataForm.patchValue({'name': this.dataForm.get('name').value});
         },
         err => {
           console.error(err);
@@ -110,6 +113,14 @@ private _getTeamOwnersList() {
       );
   }
   
+
+  private _compOwner(o1: any, o2: any) : boolean{
+    return (o1 && o2 ? o1._id == o2._id : o1===o2);
+  }
+  
+  private _compPlyr(p1: any, p2: any) : boolean {
+    return (p1 && p2? p1.fullName == p2.fullName : p1 === p2);
+  }
   
 
   private _buildForm() {
@@ -117,7 +128,7 @@ private _getTeamOwnersList() {
       owner: [this.formObj.owner, [
         Validators.required
       ]],
-      name: [this.formObj.name,
+      player: [(this.formObj.name == null? null : this.rfa_data.find((plyr) => {return plyr.fullName == this.formObj.name})),
         Validators.required
       ], 
       adv: [this.formObj.adv]
@@ -147,9 +158,11 @@ private _getTeamOwnersList() {
     }
 
     this._onValueChanged();
+    
   }
 
   private _onValueChanged() {
+    
     if (!this.dataForm) { return; }
     const _setErrMsgs = (control: AbstractControl, errorsObj: any, field: string) => {
       if (control && control.dirty && control.invalid) {
@@ -171,6 +184,8 @@ private _getTeamOwnersList() {
           _setErrMsgs(this.dataForm.get(field), this.formErrors, field);
       }
     }
+
+  this._getFilteredPlayers(this.dataForm.get('owner').value);
   }
 
   private _getSubmitObj() {
@@ -179,8 +194,8 @@ private _getTeamOwnersList() {
     // to JS dates and populate a new GolferModel for submission
     return new RFAModel(
       this.dataForm.get('owner').value._id, // Need to think about these - probably need to extract _id from these differently.  
-      this.dataForm.get('name').value.fullName,
-      this.dataForm.get('name').value.ADV,
+      this.dataForm.get('player').value.fullName,
+      this.dataForm.get('player').value.ADV,
       this.rfa ? this.rfa._id : null
     );
   }

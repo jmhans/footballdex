@@ -37,8 +37,13 @@
           [routerLink]="['/rfa', rfa._id]"
           class="list-group-item list-group-item-action flex-column align-items-start">
           <div class="d-flex w-100 justify-content-between">
-            <strong *ngIf="rfa">{{rfa.name }}</strong> |
-            {{rfa.owner.teamname}}
+            <strong *ngIf="rfa">{{rfa.name }}</strong> 
+            <span>Prior Owner: {{rfa.owner.teamname}}</span>
+            <span>RFA Reserve Value: {{rfa.adv * .8}}</span>
+            <span>ESPN ADV: {{rfa.adv}}</span>
+            <button>
+              SomeButton
+            </button>
           </div>
         </a>
       </section>

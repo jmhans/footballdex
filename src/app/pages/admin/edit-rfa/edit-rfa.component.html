@@ -1,0 +1,15 @@
+<!-- src/app/pages/admin/edit-round/edit-round.component.html -->
+<h1 class="text-center">{{ pageTitle }}</h1>
+
+<ng-template [ngIf]="utils.isLoaded(loading)">
+  <ng-template [ngIf]="rfa">
+    <!-- Event form -->
+    <app-rfa-form [rfa]="rfa"></app-rfa-form>
+  </ng-template>
+
+  <!-- Error loading event -->
+  <p *ngIf="error" class="alert alert-danger">
+    <strong>Error:</strong> Data could not be retrieved. View <a routerLink="/rfa" class="alert-link">RFAs</a>.
+  </p>
+</ng-template>
+

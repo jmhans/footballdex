@@ -46,6 +46,7 @@ import { RfaFormComponent } from './pages/admin/rfa-form/rfa-form.component';
 import { CreateRfaComponent } from './pages/admin/create-rfa/create-rfa.component';
 import { RfasComponent } from './rfas/rfas.component';
 import { DetailsComponent } from './rfas/details/details.component';
+import { EditRfaComponent } from './pages/admin/edit-rfa/edit-rfa.component';
 
 
 @NgModule({
@@ -66,7 +67,8 @@ import { DetailsComponent } from './rfas/details/details.component';
     RfaFormComponent,
     CreateRfaComponent,
     RfasComponent,
-    DetailsComponent
+    DetailsComponent,
+    EditRfaComponent
   ],
   imports: [
     BrowserModule,
