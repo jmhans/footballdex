@@ -10,7 +10,8 @@ const rfaSchema = new Schema({
 
 const teamOwnerSchema = new Schema({
   name: {type: String, required: true}, 
-  teamname: {type: String, required: true}
+  teamname: {type: String, required: true}, 
+  espn_team_id: {type: Number, required: false}
 })
 
 

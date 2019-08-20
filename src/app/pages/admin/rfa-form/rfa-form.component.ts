@@ -1,67 +1,78 @@
 import { Component, OnInit, OnDestroy, Input } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, AbstractControl } from '@angular/forms';
-import { TeamOwnerModel, FormTeamOwnerModel } from './../../../core/models/teamOwners.model';
+import { UtilsService } from './../../../core/services/utils.service';
+import { RFAModel, FormRFAModel } from './../../../core/models/rfa.model';
+import { TeamOwnerModel} from './../../../core/models/teamOwners.model';
+import { rfa_data } from './../../../core/models/fbd.rfa';
+
 import { ApiService } from './../../../core/services/api.service';
 import { Subscription } from 'rxjs';
 import { Router } from '@angular/router';
 
-
 @Component({
-  selector: 'app-team-owner-form',
-  templateUrl: './team-owner-form.component.html',
-  styleUrls: ['./team-owner-form.component.scss']
+  selector: 'app-rfa-form',
+  templateUrl: './rfa-form.component.html',
+  styleUrls: ['./rfa-form.component.scss']
 })
-export class TeamOwnerFormComponent implements OnInit, OnDestroy {
-  @Input() teamOwner: TeamOwnerModel;
+export class RfaFormComponent implements OnInit, OnDestroy {
+
+ @Input() rfa: RFAModel;
+  rfa_data: any[];
+  owners: TeamOwnerModel[];
+  ownersListSub: Subscription;
+  
+  filteredPlayers: any;
   
   isEdit: boolean;
   // FormBuilder form
   dataForm: FormGroup;
   // Model storing initial form values
-  formObj: FormTeamOwnerModel;
+  formObj: FormRFAModel;
   // Form validation and disabled logic
 
   formChangeSub: Subscription;
   // Form submission
-  submitObj: TeamOwnerModel;
+  submitObj: RFAModel;
   submitSub: Subscription;
   error: boolean;
   submitting: boolean;
   submitBtnText: string;
+  loading: boolean;
   
   
   // Set up errors object
   formErrors: any = {
+    owner: '',
     name: '',
-    teamname: '',
-    espn_team_id: ''
+    adv:''
   }
   
   validationMessages: any = {
+      owner: {
+        required: `Owner is <strong>required</strong>.`
+      },
       name: {
         required: `Name is <strong>required</strong>.`
-      },
-      teamname: {
-        required: `Team Name is <strong>required</strong>.`
-      }, 
-      espn_team_id: {}
+      }
   }
   
   
   constructor(
     private fb: FormBuilder,
+    public utils: UtilsService,
     private api: ApiService,
     public router: Router
   ) { }
 
   ngOnInit() {
     this.formErrors = this.formErrors;
-    this.isEdit = !!this.teamOwner;
+    this.isEdit = !!this.rfa;
     this.submitBtnText = this.isEdit ? 'Update Data' : 'Create Data';
     // Set initial form data
     this.formObj = this._setFormObj();
     // Use FormBuilder to construct the form
-    
+    this.rfa_data = rfa_data.data;
+    this._getTeamOwnersList();
     this._buildForm();
   }
 
@@ -70,27 +81,46 @@ export class TeamOwnerFormComponent implements OnInit, OnDestroy {
     if (!this.isEdit) {
       // If creating a new Golfer, create new
       // FormGolferModel with default null data
-      return new FormTeamOwnerModel(null, null, null);
+      return new FormRFAModel(null, null, null);
     } else {
-      return new FormTeamOwnerModel(
-        this.teamOwner.name,
-        this.teamOwner.teamname,
-        this.teamOwner.espn_team_id
+      return new FormRFAModel(
+        this.rfa.owner,
+        this.rfa.name, 
+        this.rfa.adv
       );
     }
+  }
+  
+private _getTeamOwnersList() {
+    this.loading = true;
+    // Get future, public events
+    this.ownersListSub = this.api
+      .getData$('teamOwners')
+      .subscribe(
+        res => {
+          this.owners = res;
+          this.loading = false;
+          //this.filteredPlayers = this._getFilteredPlayers();
+        },
+        err => {
+          console.error(err);
+          this.loading = false;
+          this.error = true;
+        }
+      );
   }
   
   
 
   private _buildForm() {
     this.dataForm = this.fb.group({
-      name: [this.formObj.name, [
+      owner: [this.formObj.owner, [
         Validators.required
       ]],
-      teamname: [this.formObj.teamname,
+      name: [this.formObj.name,
         Validators.required
       ], 
-      espn_team_id: [this.formObj.espn_team_id]
+      adv: [this.formObj.adv]
     });
     
    
@@ -147,11 +177,11 @@ export class TeamOwnerFormComponent implements OnInit, OnDestroy {
 
     // Convert form startDate/startTime and endDate/endTime
     // to JS dates and populate a new GolferModel for submission
-    return new TeamOwnerModel(
-      this.dataForm.get('name').value, // Need to think about these - probably need to extract _id from these differently.  
-      this.dataForm.get('teamname').value,
-      this.dataForm.get('espn_team_id').value,
-      this.teamOwner ? this.teamOwner._id : null
+    return new RFAModel(
+      this.dataForm.get('owner').value._id, // Need to think about these - probably need to extract _id from these differently.  
+      this.dataForm.get('name').value.fullName,
+      this.dataForm.get('name').value.ADV,
+      this.rfa ? this.rfa._id : null
     );
   }
 
@@ -161,19 +191,30 @@ export class TeamOwnerFormComponent implements OnInit, OnDestroy {
 
     if (!this.isEdit) {
       this.submitSub = this.api
-        .postData$('teamOwners', this.submitObj)
+        .postData$('rfas', this.submitObj)
         .subscribe(
           data => this._handleSubmitSuccess(data),
           err => this._handleSubmitError(err)
         );
     } else {
       this.submitSub = this.api
-        .editData$('teamOwners', this.teamOwner._id, this.submitObj)
+        .editData$('rfas', this.rfa._id, this.submitObj)
         .subscribe(
           data => this._handleSubmitSuccess(data),
           err => this._handleSubmitError(err)
         );
     }
+  }
+  
+  private _getFilteredPlayers(new_owner) {
+    if (new_owner) {
+      return this.rfa_data.filter((plyr) => {return (plyr.TeamId == new_owner.espn_team_id)});
+      } else return [];
+  }
+  
+  private _onOwnerChange(event) {
+    console.log(event)
+    this.filteredPlayers = this._getFilteredPlayers(event.value)
   }
 
   private _handleSubmitSuccess(res) {
@@ -198,9 +239,7 @@ export class TeamOwnerFormComponent implements OnInit, OnDestroy {
       this.submitSub.unsubscribe();
     }
     this.formChangeSub.unsubscribe();
+    this.ownersListSub.unsubscribe();
   }
 
 }
-
-
-

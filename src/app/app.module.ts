@@ -42,6 +42,10 @@ import { CreateTeamOwnerComponent } from './pages/admin/create-team-owner/create
 import { EditTeamOwnerComponent } from './pages/admin/edit-team-owner/edit-team-owner.component';
 import { TeamOwnerComponent } from './pages/team-owner/team-owner.component';
 import { TeamOwnerDetailsComponent } from './pages/team-owner/team-owner-details/team-owner-details.component';
+import { RfaFormComponent } from './pages/admin/rfa-form/rfa-form.component';
+import { CreateRfaComponent } from './pages/admin/create-rfa/create-rfa.component';
+import { RfasComponent } from './rfas/rfas.component';
+import { DetailsComponent } from './rfas/details/details.component';
 
 
 @NgModule({
@@ -58,7 +62,11 @@ import { TeamOwnerDetailsComponent } from './pages/team-owner/team-owner-details
     CreateTeamOwnerComponent,
     EditTeamOwnerComponent,
     TeamOwnerComponent,
-    TeamOwnerDetailsComponent
+    TeamOwnerDetailsComponent,
+    RfaFormComponent,
+    CreateRfaComponent,
+    RfasComponent,
+    DetailsComponent
   ],
   imports: [
     BrowserModule,

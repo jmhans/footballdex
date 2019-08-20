@@ -9,7 +9,11 @@ import { AdminComponent } from './pages/admin/admin.component';
 import { CreateTeamOwnerComponent } from './pages/admin/create-team-owner/create-team-owner.component';
 import { EditTeamOwnerComponent } from './pages/admin/edit-team-owner/edit-team-owner.component';
 
+import { CreateRfaComponent } from './pages/admin/create-rfa/create-rfa.component';
+
 import { TeamOwnerComponent } from './pages/team-owner/team-owner.component';
+import { RfasComponent } from './rfas/rfas.component';
+import { DetailsComponent } from './rfas/details/details.component';
 
 const routes: Routes = [
   {
@@ -23,8 +27,12 @@ const routes: Routes = [
   {path: 'admin', canActivate: [ AuthGuard, AdminGuard ], children: [ { path: '', component: AdminComponent }, 
                                                                       { path: 'teamOwner/:id', component: EditTeamOwnerComponent }
                                                                     ]}, 
-  {path: 'create', canActivate: [ AuthGuard, AdminGuard], children: [ {path: 'teamOwner', component: CreateTeamOwnerComponent}]},
-  {path: 'teamOwner', canActivate: [ AuthGuard], children: [ {path: ':id', component: TeamOwnerComponent}]}
+  {path: 'create', canActivate: [ AuthGuard, AdminGuard], children: [ {path: 'teamOwner', component: CreateTeamOwnerComponent}, 
+                                                                    {path: 'rfa', component: CreateRfaComponent}
+                                                                    ]},
+  {path: 'teamOwner', canActivate: [ AuthGuard], children: [ {path: ':id', component: TeamOwnerComponent}]},
+  {path: 'rfa', canActivate: [ AuthGuard], children: [ {path: '', component: RfasComponent}, 
+                                                     {path: ':id', component: DetailsComponent }]}
 
 ];
 

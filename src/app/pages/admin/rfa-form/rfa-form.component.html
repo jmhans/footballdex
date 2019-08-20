@@ -1,8 +1,25 @@
 <!-- src/app/pages/admin/game-form/game-form.component.html -->
-<form [formGroup]="dataForm" (ngSubmit)="onSubmit()">
+<form [formGroup]="dataForm" (ngSubmit)="onSubmit()" *ngIf="utils.isLoaded(loading)">
   
-  <div class="form-group">
-    <label for="name">Owner Name</label>
+  <mat-form-field>
+    <mat-label>Owner</mat-label>
+    <mat-select formControlName="owner" (selectionChange)="_onOwnerChange($event)">
+      <mat-option *ngFor="let owner of owners" [value]="owner">
+        {{owner.teamname}}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+  <mat-form-field>
+    <mat-label>Player</mat-label>
+    <mat-select formControlName="name">
+      <mat-option *ngFor="let plyr of filteredPlayers" [value]="plyr">
+        {{plyr.fullName}}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+  
+<!--   <div class="form-group">
+    <label for="name">Player Name</label>
 
         <input
       id="name"
@@ -15,37 +32,22 @@
       class="small text-danger formErrors"
       [innerHTML]="formErrors.name">
     </div>
-  </div>
-  <div class="form-group">
-    <label for="teamname">Team Name</label>
-      <input
-            type="text"
-            class="form-control"
-            formControlName="teamname"
-            id="teamname"
-            required
-      >
+  </div> -->
+<!--     <div class="form-group">
+    <label for="adv">ADV</label>
+
+        <input
+      id="adv"
+      type="number"
+      class="form-control"
+      formControlName="adv"
+      required>
     <div
-      *ngIf="formErrors.teamname"
+      *ngIf="formErrors.adv"
       class="small text-danger formErrors"
-      [innerHTML]="formErrors.teamname">
+      [innerHTML]="formErrors.adv">
     </div>
-  </div>
-    <div class="form-group">
-    <label for="espn_team_id">ESPN Team Id</label>
-      <input
-            type="text"
-            class="form-control"
-            formControlName="espn_team_id"
-            id="espn_team_id"
-            required
-      >
-    <div
-      *ngIf="formErrors.espn_team_id"
-      class="small text-danger formErrors"
-      [innerHTML]="formErrors.espn_team_id">
-    </div>
-  </div>
+  </div> -->
 
   <!-- Submit -->
   <div class="form-group">
@@ -68,5 +70,6 @@
     </p>
   </div>
 </form>
+
 
 

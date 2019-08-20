@@ -1,0 +1,63 @@
+
+<ng-template [ngIf]="utils.isLoaded(loading) ? true: false">
+  <h1 class="text-center">{{ pageTitle }}</h1>
+  <!-- Event -->
+  <ng-template [ngIf]="rfa">
+    <div class="card">
+      <!-- Event tab navigation -->
+      <div class="card-header">
+        <ul class="nav nav-tabs card-header-tabs">
+          <li class="nav-item">
+            <a
+              class="nav-link"
+              [routerLink]="[]"
+              [queryParams]="{ tab: 'details' }"
+              [ngClass]="{ 'active': utils.tabIs(tab, 'details') }">Details</a>
+          </li>
+        </ul>
+        
+      </div>
+
+      <!-- Round detail tab -->
+<div *ngIf="utils.tabIs(tab, 'details')">
+   <div class="card-body">
+  <h2 class="card-title text-center mb-0">RFA Details</h2>
+</div>
+
+<ul class="list-group list-group-flush">
+  <li class="list-group-item">
+    <strong>Name:</strong>{{ rfa.name }}
+  </li>
+  <li class="list-group-item">
+    <strong>Prior Owner:</strong> {{rfa.owner}}
+  </li>
+    <li class="list-group-item">
+    <strong>ADV:</strong> {{rfa.adv}}
+  </li>
+</ul>
+
+<div *ngIf="auth.isAdmin" class="card-footer text-right small">
+  <!-- To do: create an /admin/game/update route and service -->
+  <a [routerLink]="['/admin/rfa', rfa._id]">Edit</a>
+</div>
+
+
+  
+      </div>
+     
+      
+      
+      
+      
+    </div>
+  </ng-template>
+
+  <!-- Error loading events -->
+  <p *ngIf="error" class="alert alert-danger">
+    <strong>Oops!</strong> There was an error retrieving information for this owner.
+  </p>
+</ng-template>
+
+
+
+

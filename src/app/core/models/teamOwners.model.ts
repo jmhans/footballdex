@@ -3,6 +3,7 @@ class TeamOwnerModel {
     constructor(
     public name: string,
     public teamname: string,
+    public espn_team_id: number,
     public _id?: string
   ) { }
 }
@@ -10,7 +11,8 @@ class TeamOwnerModel {
 class FormTeamOwnerModel {
   constructor(
     public name: string,
-    public teamname: string
+    public teamname: string,
+    public espn_team_id: number
   ) { }
 }
 
