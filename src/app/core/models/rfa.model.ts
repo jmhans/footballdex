@@ -8,6 +8,13 @@ class RFAModel {
   ) { }
 }
 
+class RFAModelWithBids {
+      constructor(
+    public rfa: RFAModel,
+    public bids?: any[]
+  ) { }
+}
+
 class FormRFAModel {
   constructor(
     public owner: any,
@@ -17,5 +24,5 @@ class FormRFAModel {
 }
 
 
-export { RFAModel, FormRFAModel };
+export { RFAModel, FormRFAModel, RFAModelWithBids };
 

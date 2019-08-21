@@ -192,8 +192,8 @@ private _getTeamOwnersList() {
     // to JS dates and populate a new GolferModel for submission
     return new RFAModel(
       this.dataForm.get('owner').value._id, // Need to think about these - probably need to extract _id from these differently.  
-      this.dataForm.get('name').value.fullName,
-      this.dataForm.get('name').value.ADV,
+      this.dataForm.get('player').value.fullName,
+      this.dataForm.get('player').value.ADV,
       this.rfa ? this.rfa._id : null
     );
   }

@@ -68,7 +68,7 @@ tab: string;
       .getDatabyId$('rfas', this.id)
       .subscribe(
         res => {
-          this.rfa = res;
+          this.rfa = res.rfa;
           this._setPageTitle(this.rfa.name);
           this.loading = false;
         },

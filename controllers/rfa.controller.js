@@ -3,6 +3,9 @@
 const request = require('request');
 const ObjectId = require('mongoose').Types.ObjectId;
 
+var express = require('express');
+var router = express.Router();
+
 
 const rfa = require('./../models/rfa').rfa;
 const teamOwner = require('./../models/rfa').teamOwner;
@@ -16,6 +19,8 @@ class RFAController extends BaseController {
     super(rfa, 'rfas');
   }
   
+
+  
   _getOne(req, res, next) {
   this.model.findById(req.params.id).populate('owner').exec(function (err, post) {
     if (err) return next(err);
@@ -23,11 +28,46 @@ class RFAController extends BaseController {
   });
 }
 _get(req, res, next) {
+  
+    var _getBidsForRFA = function(rfa) {
+      return new Promise(function(resolve, reject) {
+        bid.find({rfa: rfa._id}).exec(function (bidErr, bids){
+          if(bidErr) return next(err);
+          resolve( {rfa: rfa, bids:bids});
+        })  
+      })
+      
+    }
+  
   this.model.find().populate('owner').exec(function(err, results) {
     if (err) return next(err);
-    res.json(results);
+
+    Promise.all(results.map((rfa)=> {
+      return _getBidsForRFA(rfa);
+    })).then((rfasWithBids) => {
+      res.json (rfasWithBids);
+    })  
+    //res.json(results);
   });
-  }  
+  }
+  
+
+  
+  
+_getOneWithBids(req, res, next) {
+  this.model.findById(req.params.id).populate('owner').exec(function (err, post) {
+    if (err) return next(err);
+    bid.find({rfa: req.params.id }).exec(function (bidErr, bids) {
+      post.bids = bids; 
+      res.json({rfa: post, bids: bids});                                       
+    });
+
+    
+  });
+  
+  
+  
+}
   
 _create(req, res, next) {
   const model = this.model
@@ -49,6 +89,16 @@ _create(req, res, next) {
 }
   
   
+  route() {
+    router.get('/' + this.routeString, (...args) => this._get(...args));
+    router.post('/' + this.routeString , (...args) => this._create(...args));
+    router.get('/' + this.routeString + '/:id', (...args) => this._getOneWithBids(...args));
+    router.put('/' + this.routeString + '/:id', (...args) => this._update(...args));
+    router.delete('/' + this.routeString + '/:id', (...args) => this._delete(...args));
+    return router;
+  }
+  
+  
 }
 
 class TeamOwnerController extends BaseController {
@@ -63,6 +113,9 @@ class BidController extends BaseController {
   constructor() {
     super(bid, 'bids');
   }
+  
+  
+  
 }
 
 

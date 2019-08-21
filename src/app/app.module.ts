@@ -15,6 +15,7 @@ import { MatMenuModule} from '@angular/material/menu';
 import {MatButtonModule} from '@angular/material/button';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import {MatExpansionModule} from '@angular/material/expansion';
+import {MatCardModule} from '@angular/material/card';
 
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
@@ -93,7 +94,8 @@ import { EditRfaComponent } from './pages/admin/edit-rfa/edit-rfa.component';
     MatButtonModule,
     FlexLayoutModule,
     MatIconModule,
-    MatExpansionModule
+    MatExpansionModule,
+    MatCardModule
     
   ],
   providers: [

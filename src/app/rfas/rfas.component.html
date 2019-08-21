@@ -5,47 +5,69 @@
   <ng-template [ngIf]="rfaList">
     <ng-template [ngIf]="rfaList.length">
 
-      <!-- Search events -->
-      <label class="sr-only" for="search">Search</label>
-      <div class="search input-group mb-3">
-        <div class="input-group-prepend">
-          <div class="input-group-text">Search</div>
-        </div>
-        <input
-          id="search"
-          type="text"
-          class="form-control"
-          [(ngModel)]="query"
-          (keyup)="searchRFAs()" />
-        <span class="input-group-append">
-          <button
-            class="btn btn-danger"
-            (click)="resetQuery()"
-            [disabled]="!query">&times;</button>
-        </span>
-      </div>
-
-      <!-- No search results -->
-      <p *ngIf="fs.noSearchResults(filteredRFAs, query)" class="alert alert-warning">
-        No rfas found for <em class="text-danger">{{ query }}</em>, sorry!
-      </p>
-
-      <!-- Events listing -->
+      <!-- RFA listing -->
       <section class="list-group">
-        <a
-          *ngFor="let rfa of fs.orderByDate(filteredRFAs, 'startDatetime')"
-          [routerLink]="['/rfa', rfa._id]"
-          class="list-group-item list-group-item-action flex-column align-items-start">
-          <div class="d-flex w-100 justify-content-between">
-            <strong *ngIf="rfa">{{rfa.name }}</strong> 
-            <span>Prior Owner: {{rfa.owner.teamname}}</span>
-            <span>RFA Reserve Value: {{rfa.adv * .8}}</span>
-            <span>ESPN ADV: {{rfa.adv}}</span>
-            <button>
-              SomeButton
-            </button>
+         
+          
+          <div class="d-flex w-100 justify-content-between" *ngFor="let rfa of rfaList" class="list-group-item list-group-item-action flex-column align-items-start">
+            
+            <div class="container">
+              <div class="row">
+                <div class="col-8">
+                  <a [routerLink]="['/rfa', rfa.rfa._id]" *ngIf="rfa">
+                    <strong >
+                      {{rfa.rfa.name }}
+                    </strong> 
+                  </a>
+                  <small class="d-none d-md-block">({{rfa.rfa.owner.teamname}})</small>
+                </div>
+                <div class="col-4">
+                   Current bid: <span class="badge badge-primary badge-pill">{{_bidSummary(rfa.rfa.bids).maxBid}} </span>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-2 d-none d-md-block">
+                  <small><span>RFA Reserve: {{rfa.rfa.adv * .8 | number : '1.0-0'}}</span></small>
+                </div>
+                <div class="col-2 d-none d-sm-block">
+                  <small><span>ESPN ADV: {{rfa.rfa.adv | number: '1.0-0'}}</span></small>
+                </div>
+                <div class="col-2 d-none d-sm-block">
+                  <small><span>Bid Count:{{_bidSummary(rfa.rfa.bids).maxBid}}</span></small>
+                </div>
+                <div *ngIf="auth.loggedIn" class="col-4 ">
+                  <mat-form-field class="example-form-field">
+                    <input matInput type="number" placeholder="Bid amount" [(ngModel)]="rfa.bidAmt">
+
+                  </mat-form-field>
+
+                </div>
+                <button *ngIf="auth.loggedIn" class="col-2" mat-button (click)="_placeBid(rfa.rfa, rfa.bidAmt)">
+                  <mat-icon>input</mat-icon>
+                </button>
+               
+              </div>
+             
+            </div>
+
           </div>
-        </a>
+
+        
+<!--         <mat-card class="example-card" *ngFor="let rfa of filteredRFAs">
+          <mat-card-header >
+            <mat-card-title *ngIf="rfa">{{rfa.name}}</mat-card-title>
+            <mat-card-subtitle>{{rfa.owner.teamname}}</mat-card-subtitle>
+          </mat-card-header>
+          <mat-card-content>
+            <span>ADV: {{rfa.adv | number:0}}</span>
+            <span>Reserve: {{rfa.adv * .8 | number:0}}</span>
+            <span>Bid Count: 3</span>
+            <span>Max Bid: 26</span>
+          </mat-card-content>
+          
+        </mat-card> -->
+        
+        
       </section>
     </ng-template>
 
