@@ -14,54 +14,14 @@
   <div>
     <mat-form-field>
       <mat-label>Player</mat-label>
-      <mat-select id="player" formControlName="player" [compareWith]="_compOwner">
+      <mat-select id="player" formControlName="player" [compareWith]="_compPlyr">
         <mat-option *ngFor="let plyr of filteredPlayers" [(value)]="plyr">
           {{plyr.fullName}}
         </mat-option>
       </mat-select>
     </mat-form-field>
-    
   </div>
-  
-  
-    <div>
-    <mat-form-field>
-      <mat-label>ADV</mat-label>
-      <input matInput placeholder="ADV" formControlName="adv">
-    </mat-form-field>
-    
-  </div>
-  
-<!--   <div class="form-group">
-    <label for="name">Player Name</label>
-
-        <input
-      id="name"
-      type="text"
-      class="form-control"
-      formControlName="name"
-      required>
-    <div
-      *ngIf="formErrors.name"
-      class="small text-danger formErrors"
-      [innerHTML]="formErrors.name">
-    </div>
-  </div> -->
-<!--     <div class="form-group">
-    <label for="adv">ADV</label>
-
-        <input
-      id="adv"
-      type="number"
-      class="form-control"
-      formControlName="adv"
-      required>
-    <div
-      *ngIf="formErrors.adv"
-      class="small text-danger formErrors"
-      [innerHTML]="formErrors.adv">
-    </div>
-  </div> -->
+ 
 
   <!-- Submit -->
   <div class="form-group">

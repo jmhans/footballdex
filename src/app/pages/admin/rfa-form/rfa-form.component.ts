@@ -101,9 +101,7 @@ private _getTeamOwnersList() {
         res => {
           this.owners = res;
           this.loading = false;
-          //this.dataForm.patchValue({'owner' : res.filter((o)=> {return o.name == this.rfa['owner']['name']})});
-      //    this.filteredPlayers = this._getFilteredPlayers();
-     //     this.dataForm.patchValue({'name': this.dataForm.get('name').value});
+
         },
         err => {
           console.error(err);
@@ -119,7 +117,7 @@ private _getTeamOwnersList() {
   }
   
   private _compPlyr(p1: any, p2: any) : boolean {
-    return (p1 && p2? p1.fullName == p2.fullName : p1 === p2);
+    return (p1 && p2 ? p1.fullName == p2.fullName : p1 === p2);
   }
   
 
@@ -184,8 +182,8 @@ private _getTeamOwnersList() {
           _setErrMsgs(this.dataForm.get(field), this.formErrors, field);
       }
     }
-
-  this._getFilteredPlayers(this.dataForm.get('owner').value);
+  
+  this.filteredPlayers = this._getFilteredPlayers(this.dataForm.get('owner').value);
   }
 
   private _getSubmitObj() {
@@ -194,8 +192,8 @@ private _getTeamOwnersList() {
     // to JS dates and populate a new GolferModel for submission
     return new RFAModel(
       this.dataForm.get('owner').value._id, // Need to think about these - probably need to extract _id from these differently.  
-      this.dataForm.get('player').value.fullName,
-      this.dataForm.get('player').value.ADV,
+      this.dataForm.get('name').value.fullName,
+      this.dataForm.get('name').value.ADV,
       this.rfa ? this.rfa._id : null
     );
   }
@@ -226,11 +224,7 @@ private _getTeamOwnersList() {
       return this.rfa_data.filter((plyr) => {return (plyr.TeamId == new_owner.espn_team_id)});
       } else return [];
   }
-  
-  private _onOwnerChange(event) {
-    console.log(event)
-    this.filteredPlayers = this._getFilteredPlayers(event.value)
-  }
+ 
 
   private _handleSubmitSuccess(res) {
     this.error = false;
