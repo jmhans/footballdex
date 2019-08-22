@@ -180,7 +180,7 @@ export class TeamOwnerFormComponent implements OnInit, OnDestroy {
     this.error = false;
     this.submitting = false;
     // Redirect to Golfer detail
-    this.router.navigate(['/admin']);
+    this.router.navigate(['/rfa']);
   }
 
   private _handleSubmitError(err) {
