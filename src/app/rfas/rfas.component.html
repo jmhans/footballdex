@@ -33,7 +33,7 @@
                   <small><span>ESPN ADV: {{rfa.rfa.rfa.adv | number: '1.0-0'}}</span></small>
                 </div>
                 <div class="col-2 d-none d-sm-block">
-                  <small><span>Bid Count:{{_bidSummary(rfa.rfa.bids).maxBid}}</span></small>
+                  <small><span>Bid Count:{{_bidSummary(rfa.rfa.bids).bidCt}}</span></small>
                 </div>
                 <div *ngIf="auth.loggedIn" class="col-4 ">
                   <mat-form-field class="example-form-field">
