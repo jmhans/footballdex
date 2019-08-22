@@ -6,7 +6,7 @@
       <mat-label>Owner</mat-label>
       <mat-select id="owner" formControlName="owner" [compareWith]="_compOwner">
         <mat-option *ngFor="let owner of owners" [(value)]="owner">
-          {{owner.teamname}}
+          {{owner.teamname}} || {{owner.name}}
         </mat-option>
       </mat-select>
     </mat-form-field>

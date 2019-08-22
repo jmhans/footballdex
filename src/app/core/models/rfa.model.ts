@@ -4,6 +4,7 @@ class RFAModel {
     public owner: any,
     public name: string,
     public adv?: number,
+    public created_by?: string,
     public _id?: string
   ) { }
 }

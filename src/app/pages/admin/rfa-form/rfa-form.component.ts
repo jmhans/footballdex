@@ -6,6 +6,7 @@ import { TeamOwnerModel} from './../../../core/models/teamOwners.model';
 import { rfa_data } from './../../../core/models/fbd.rfa';
 
 import { ApiService } from './../../../core/services/api.service';
+import { AuthService } from './../../../auth/auth.service';
 import { Subscription } from 'rxjs';
 import { Router } from '@angular/router';
 
@@ -61,7 +62,8 @@ export class RfaFormComponent implements OnInit, OnDestroy {
     private fb: FormBuilder,
     public utils: UtilsService,
     private api: ApiService,
-    public router: Router
+    public router: Router,
+    public auth: AuthService
   ) { }
 
   ngOnInit() {
@@ -194,6 +196,7 @@ private _getTeamOwnersList() {
       this.dataForm.get('owner').value._id, // Need to think about these - probably need to extract _id from these differently.  
       this.dataForm.get('player').value.fullName,
       this.dataForm.get('player').value.ADV,
+      this.auth.userProfile.name, 
       this.rfa ? this.rfa._id : null
     );
   }

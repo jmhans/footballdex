@@ -6,7 +6,8 @@ const rfaSchema = new Schema({
     owner: {type: Schema.Types.ObjectId, ref: 'TeamOwner'
            },
     name: {type: String, required: false},
-    adv: {type: Number}
+    adv: {type: Number}, 
+    created_by: {type: String, required: false}
 })
 
 const teamOwnerSchema = new Schema({
