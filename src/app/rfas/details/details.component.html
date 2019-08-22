@@ -29,11 +29,14 @@
     <strong>Name:</strong>{{ rfa.name }}
   </li>
   <li class="list-group-item">
-    <strong>Prior Owner:</strong> {{rfa.owner}}
+    <strong>Prior Owner:</strong> {{rfa.owner.teamname}}
   </li>
     <li class="list-group-item">
     <strong>ADV:</strong> {{rfa.adv}}
   </li>
+  <ul class="list-group list-group-flush">
+    <li class="list-group-item" *ngFor="let bid of rfa.bids"> <span>Amount:{{bid_amount}}</span></li>
+  </ul>
 </ul>
 
 <div *ngIf="auth.isAdmin" class="card-footer text-right small">

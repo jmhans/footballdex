@@ -17,7 +17,6 @@ interface extendedRFAModel {
   error: string;
   bidAmt: number;
   success: string;
-  bidSummary: any;
 };
 
 
@@ -59,10 +58,10 @@ pageTitle = 'Restricted Free Agents';
       .getData$('rfas')
       .subscribe(
         res => {
-          this.rfaList = res.map((rfa) => {return {rfa: rfa.rfa, error:'', bidAmt:0, success: '', bidSummary: this._summarizeBidData(rfa.bids) }});
+          this.rfaList = res.map((rfa) => {return {rfa: rfa, error:'', bidAmt:0, success: '' }});
          // this.filteredRFAs = res;
           this.rfaList.forEach((rfa) => {
-            rfa.bidAmt = rfa.bidSummary.maxBid + 1
+            rfa.bidAmt = this._bidSummary(rfa.rfa.bids).maxBid + 1
           });
 
           this.loading = false;
@@ -103,7 +102,7 @@ pageTitle = 'Restricted Free Agents';
 
 
    private _placeBid(rfa, bidAmt) {
-     const bidObj = {bidder: 'Justin', bid_amount: bidAmt, rfa: rfa._id}
+     const bidObj = {bidder: this.auth.userProfile.name? this.auth.userProfile.name : this.auth.userProfile.email, bid_amount: bidAmt, rfa: rfa._id}
      //Fix to post data!  
      this.submitSub = this.api
       .postData$('bids', bidObj)
@@ -114,11 +113,11 @@ pageTitle = 'Restricted Free Agents';
    }
   
   private _handleSubmitSuccess(data) {
-    this.rfaList.find((listItem)=> {return listItem.rfa.rfa._id = data.rfa}).rfa.bids.push(data);
-    
+    this.rfaList.find((listItem)=> {return listItem.rfa.rfa._id == data.rfa}).rfa.bids.push(data);
+    this.rfaList.find((listItem)=> {return listItem.rfa.rfa._id == data.rfa}).success = 'Success';
   }
   private _handleSubmitError(err) {
-    
+    this.rfaList.find((listItem)=> {return listItem.rfa.rfa._id == err.rfa}).error = 'Error: Please try again';
   }
   
   

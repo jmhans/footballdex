@@ -49,7 +49,7 @@ export class EditRfaComponent implements OnInit, OnDestroy {
       .getDatabyId$('rfas', this._id)
       .subscribe(
         res => {
-          this.rfa = res;
+          this.rfa = res.rfa;
           this.loading = false;
         },
         err => {

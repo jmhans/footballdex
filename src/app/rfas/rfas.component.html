@@ -8,18 +8,18 @@
       <!-- RFA listing -->
       <section class="list-group">
          
-          
+
           <div class="d-flex w-100 justify-content-between" *ngFor="let rfa of rfaList" class="list-group-item list-group-item-action flex-column align-items-start">
-            
+
             <div class="container">
               <div class="row">
                 <div class="col-8">
-                  <a [routerLink]="['/rfa', rfa.rfa._id]" *ngIf="rfa">
+                  <a [routerLink]="['/rfa', rfa.rfa.rfa._id]" *ngIf="rfa">
                     <strong >
-                      {{rfa.rfa.name }}
+                      {{rfa.rfa.rfa.name }}
                     </strong> 
                   </a>
-                  <small class="d-none d-md-block">({{rfa.rfa.owner.teamname}})</small>
+                  <small class="d-none d-md-block">({{rfa.rfa.rfa.owner.teamname}})</small>
                 </div>
                 <div class="col-4">
                    Current bid: <span class="badge badge-primary badge-pill">{{_bidSummary(rfa.rfa.bids).maxBid}} </span>
@@ -27,10 +27,10 @@
               </div>
               <div class="row">
                 <div class="col-2 d-none d-md-block">
-                  <small><span>RFA Reserve: {{rfa.rfa.adv * .8 | number : '1.0-0'}}</span></small>
+                  <small><span>RFA Reserve: {{rfa.rfa.rfa.adv * .8 | number : '1.0-0'}}</span></small>
                 </div>
                 <div class="col-2 d-none d-sm-block">
-                  <small><span>ESPN ADV: {{rfa.rfa.adv | number: '1.0-0'}}</span></small>
+                  <small><span>ESPN ADV: {{rfa.rfa.rfa.adv | number: '1.0-0'}}</span></small>
                 </div>
                 <div class="col-2 d-none d-sm-block">
                   <small><span>Bid Count:{{_bidSummary(rfa.rfa.bids).maxBid}}</span></small>
@@ -42,8 +42,8 @@
                   </mat-form-field>
 
                 </div>
-                <button *ngIf="auth.loggedIn" class="col-2" mat-button (click)="_placeBid(rfa.rfa, rfa.bidAmt)">
-                  <mat-icon>input</mat-icon>
+                <button *ngIf="auth.loggedIn" class="col-2" mat-button (click)="_placeBid(rfa.rfa.rfa, rfa.bidAmt)">
+                  Bid<mat-icon>input</mat-icon>
                 </button>
                
               </div>
