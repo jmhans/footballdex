@@ -29,7 +29,7 @@ const routes: Routes = [
                                                                       { path: 'teamOwner/:id', component: EditTeamOwnerComponent },
                                                                      { path: 'rfa/:id', component: EditRfaComponent }
                                                                     ]}, 
-  {path: 'create', canActivate: [ AuthGuard, AdminGuard], children: [ {path: 'teamOwner', component: CreateTeamOwnerComponent}, 
+  {path: 'create', canActivate: [ AuthGuard], children: [ {path: 'teamOwner', component: CreateTeamOwnerComponent}, 
                                                                     {path: 'rfa', component: CreateRfaComponent}
                                                                     ]},
   {path: 'teamOwner', canActivate: [ AuthGuard], children: [ {path: ':id', component: TeamOwnerComponent}]},
