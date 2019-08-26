@@ -36,6 +36,8 @@ pageTitle = 'Restricted Free Agents';
   error: boolean;
   query: string = '';
   modelDate: FormControl;
+  
+  end_time: object = new Date("2019-08-28 07:00:00")
 
   constructor(
     private title: Title,
@@ -120,7 +122,9 @@ pageTitle = 'Restricted Free Agents';
     this.rfaList.find((listItem)=> {return listItem.rfa.rfa._id == err.rfa}).error = 'Error: Please try again';
   }
   
-  
+  private _bidsAllowed() {
+    return (new Date() < this.end_time);
+  }
 
   ngOnDestroy() {
     this.rfaListSub.unsubscribe();

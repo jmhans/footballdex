@@ -39,6 +39,7 @@ export class RfaFormComponent implements OnInit, OnDestroy {
   submitting: boolean;
   submitBtnText: string;
   loading: boolean;
+  entryDeadline: object = new Date("2019-08-26 11:59:59")
   
   
   // Set up errors object
@@ -242,6 +243,11 @@ private _getTeamOwnersList() {
     this.error = true;
   }
 
+  private _dataEntryAllowed() {
+    return (new Date() < this.entryDeadline);
+  }
+  
+  
   resetForm() {
     this.dataForm.reset();
   }

@@ -42,7 +42,7 @@
                   </mat-form-field>
 
                 </div>
-                <button *ngIf="auth.loggedIn" class="col-2" mat-button (click)="_placeBid(rfa.rfa.rfa, rfa.bidAmt)">
+                <button *ngIf="auth.loggedIn && _bidsAllowed()" class="col-2" mat-button (click)="_placeBid(rfa.rfa.rfa, rfa.bidAmt)">
                   Bid<mat-icon>input</mat-icon>
                 </button>
                
