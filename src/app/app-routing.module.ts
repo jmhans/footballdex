@@ -15,6 +15,8 @@ import { EditRfaComponent } from './pages/admin/edit-rfa/edit-rfa.component';
 import { TeamOwnerComponent } from './pages/team-owner/team-owner.component';
 import { RfasComponent } from './rfas/rfas.component';
 import { DetailsComponent } from './rfas/details/details.component';
+import { BidHistoryComponent } from './pages/bid-history/bid-history.component';
+
 
 const routes: Routes = [
   {
@@ -34,7 +36,8 @@ const routes: Routes = [
                                                                     ]},
   {path: 'teamOwner', canActivate: [ AuthGuard], children: [ {path: ':id', component: TeamOwnerComponent}]},
   {path: 'rfa', canActivate: [ AuthGuard], children: [ {path: '', component: RfasComponent}, 
-                                                     {path: ':id', component: DetailsComponent }]}
+                                                     {path: ':id', component: DetailsComponent }]},
+  {path: 'bids', canActivate: [ AuthGuard], children: [ {path: '', component: BidHistoryComponent}]}
 
 ];
 

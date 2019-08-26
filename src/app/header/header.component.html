@@ -33,6 +33,13 @@
       </li>
       <li>
         <a
+          *ngIf="auth.loggedIn"
+          routerLink="/bids"
+          routerLinkActive="active"
+          [routerLinkActiveOptions]="{ exact: true }">Bids</a>
+      </li>
+      <li>
+        <a
           *ngIf="auth.loggedIn && auth.isAdmin"
           routerLink="/admin"
           routerLinkActive="active"

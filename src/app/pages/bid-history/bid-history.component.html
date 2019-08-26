@@ -1,0 +1,26 @@
+<!-- src/app/pages/games/games.component.html -->
+<h1 class="text-center">{{ pageTitle }}</h1>
+
+<ng-template [ngIf]="utils.isLoaded(loading)">
+  <ng-template [ngIf]="bidList">
+    <ng-template [ngIf]="bidList.length">
+      <!-- Events listing -->
+      <section class="list-group">
+        <mat-card  *ngFor="let bid of bidList"
+          class="list-group-item list-group-item-action flex-column align-items-start">
+          <div class="d-flex w-100 justify-content-between">
+            <strong *ngIf="bid">Player: {{bid.rfa.name }}</strong>
+            Bid Amount: {{bid.bid_amount}}
+          </div>
+        </mat-card>
+      </section>
+    </ng-template>
+  </ng-template>
+
+  <!-- Error loading events -->
+  <p *ngIf="error" class="alert alert-danger">
+    <strong>Oops!</strong> There was an error retrieving bid data.
+  </p>
+
+</ng-template>
+

@@ -48,6 +48,7 @@ import { CreateRfaComponent } from './pages/admin/create-rfa/create-rfa.componen
 import { RfasComponent } from './rfas/rfas.component';
 import { DetailsComponent } from './rfas/details/details.component';
 import { EditRfaComponent } from './pages/admin/edit-rfa/edit-rfa.component';
+import { BidHistoryComponent } from './pages/bid-history/bid-history.component';
 
 
 @NgModule({
@@ -69,7 +70,8 @@ import { EditRfaComponent } from './pages/admin/edit-rfa/edit-rfa.component';
     CreateRfaComponent,
     RfasComponent,
     DetailsComponent,
-    EditRfaComponent
+    EditRfaComponent,
+    BidHistoryComponent
   ],
   imports: [
     BrowserModule,

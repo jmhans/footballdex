@@ -114,6 +114,26 @@ class BidController extends BaseController {
     super(bid, 'bids');
   }
   
+  _getBidsForEmail(req, res, next) {
+  
+    this.model.find({bidder: req.params.email}).populate('rfa').exec(function(err, bids) {
+      if (err) return next(err);
+      res.json(bids);
+    })
+  
+  }
+  
+route() {
+    router.get('/' + this.routeString, (...args) => this._get(...args));
+    router.post('/' + this.routeString , (...args) => this._create(...args));
+    router.get('/' + this.routeString + '/:id', (...args) => this._getOne(...args));
+    router.get('/' + this.routeString + '/:id', (...args) => this._getOne(...args));
+    router.put('/' + this.routeString + '/:id', (...args) => this._update(...args));
+    router.delete('/' + this.routeString + '/:id', (...args) => this._delete(...args));
+    router.get('/userbids/:email', (...args) => this._getBidsForEmail(...args));
+    return router;
+  }
+  
   
   
 }
