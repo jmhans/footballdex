@@ -27,7 +27,7 @@
     "@mdi/font": "^3.8.95",
     "@ng-bootstrap/ng-bootstrap": "^4.1.0",
     "@sendgrid/mail": "^6.3.1",
-    "auth0-js": "^9.10.0",
+    "auth0-js": "^9.13.2",
     "body-parser": "^1.18.3",
     "bootstrap": "^4.0.0-beta.2",
     "core-js": "^2.5.4",
