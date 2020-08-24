@@ -19,7 +19,7 @@ import {MatCardModule} from '@angular/material/card';
 
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
-import { HttpModule } from '@angular/http';
+//import { HttpModule } from '@angular/http';
 import { HttpClientModule }    from '@angular/common/http';
 
 import { AppRoutingModule } from './app-routing.module';
@@ -87,7 +87,7 @@ import { BidHistoryComponent } from './pages/bid-history/bid-history.component';
     MatDatepickerModule,
     MatNativeDateModule,
     MatInputModule,
-    HttpModule, 
+//    HttpModule, 
     HttpClientModule,
     AppRoutingModule, 
     HttpClientModule,
