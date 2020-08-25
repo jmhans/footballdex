@@ -243,7 +243,7 @@ private _getTeamOwnersList() {
     this.error = true;
   }
 
-  private _dataEntryAllowed() {
+  _dataEntryAllowed() {
     return (new Date() < this.entryDeadline);
   }
   
