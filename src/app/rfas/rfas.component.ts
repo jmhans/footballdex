@@ -3,6 +3,7 @@ import { Title } from '@angular/platform-browser';
 import { AuthService } from './../auth/auth.service';
 import { ApiService } from './../core/services/api.service';
 import { UtilsService } from './../core/services/utils.service';
+import { ConfigService } from './../core/services/config.service';
 import { ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { RFAModelWithBids } from './../core/models/rfa.model';
@@ -38,14 +39,15 @@ pageTitle = 'Restricted Free Agents';
   modelDate: FormControl;
   _editBid: boolean;
   
-  end_time: object = new Date("2020-09-06 23:59:59")
+//  end_time: object = new Date("2020-09-06 23:59:59")
 
   constructor(
     private title: Title,
     public utils: UtilsService,
     private api: ApiService,
     private datePipe: DatePipe,
-    private auth: AuthService
+    private auth: AuthService, 
+    private config: ConfigService
   ) { }
 
   ngOnInit() {
@@ -127,7 +129,7 @@ pageTitle = 'Restricted Free Agents';
   }
   
   private _bidsAllowed() {
-    return (new Date() < this.end_time);
+    return (new Date() < this.config.bid_end_time);
   }
 
   ngOnDestroy() {

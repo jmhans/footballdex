@@ -30,8 +30,7 @@ export class ApiService {
       catchError((error) => this._handleError(error)) 
     )
   }
-  
-  
+
   getRfasForYear$(model: string, yr: number):Observable<any[]> {
     return this.http
       .get<any[]>(`${this.base_api}${model}/yr/${yr}`, {
@@ -66,6 +65,15 @@ export class ApiService {
   editData$(model: string, id: string, data: any): Observable<any> {
     return this.http
       .put<any>(`${this.base_api}${model}/${id}`,data, {
+        headers: new HttpHeaders().set('Authorization', this._authHeader)
+      })
+      .pipe(
+        catchError((error) => this._handleError(error))
+      );
+  }
+   deleteData$(model: string, id: string): Observable<any> {
+    return this.http
+      .delete<any>(`${this.base_api}${model}/${id}`, {
         headers: new HttpHeaders().set('Authorization', this._authHeader)
       })
       .pipe(

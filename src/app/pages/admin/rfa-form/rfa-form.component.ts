@@ -1,6 +1,7 @@
 import { Component, OnInit, OnDestroy, Input } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, AbstractControl } from '@angular/forms';
 import { UtilsService } from './../../../core/services/utils.service';
+import { ConfigService } from './../../../core/services/config.service';
 import { RFAModel, FormRFAModel } from './../../../core/models/rfa.model';
 import { TeamOwnerModel} from './../../../core/models/teamOwners.model';
 import { rfa_data } from './../../../core/models/fbd.rfa';
@@ -64,7 +65,8 @@ export class RfaFormComponent implements OnInit, OnDestroy {
     public utils: UtilsService,
     private api: ApiService,
     public router: Router,
-    public auth: AuthService
+    public auth: AuthService,
+     private config: ConfigService
   ) { }
 
   ngOnInit() {
@@ -265,7 +267,7 @@ private _getTeamOwnersList() {
   }
 
   _dataEntryAllowed() {
-    return (new Date() < this.entryDeadline);
+    return (new Date() < this.config.nominate_end_time);
   }
   
   
