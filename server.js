@@ -49,10 +49,24 @@ app.use(cors());
 const port = process.env.PORT || 3000
 app.set('port', port);
 
+app.enable('trust proxy');
+
 // Set static path to Angular app in dist
 // Don't run in dev
+app.use (function (req, res, next) {
+        if (req.secure) {
+                // request was via https, so do no special handling
+                next();
+        } else {
+                // request was via http, so redirect to http
+                res.redirect('https://' + req.headers.host + req.url);
+        }
+});
+
 if (process.env.NODE_ENV !== 'dev') {
   app.use('/', express.static(path.join(__dirname, './dist')));
+  
+  
 }
 
 /*
@@ -76,5 +90,7 @@ if (process.env.NODE_ENV !== 'dev') {
  | Server
  |--------------------------------------
  */
+
+
 
 app.listen(port,  '0.0.0.0',() => console.log(`Server running on localhost:${port}`));
