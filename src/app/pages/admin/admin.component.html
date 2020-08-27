@@ -1,8 +1,11 @@
 <!-- src/app/pages/admin/update-team/update-team.component.html -->
 <h1 class="text-center">{{ pageTitle }}</h1>
 
+
+
+
  <ng-template [ngIf]="utils.isLoaded(loading)">
-  <div *ngIf="golferList" class="card">
+  <div *ngIf="teamList" class="card">
     <div class="card-header">
       <ul class="nav nav-tabs card-header-tabs">
         <li class="nav-item">
@@ -15,14 +18,13 @@
       </ul>
     </div>
 
-  <ng-template [ngIf]="teamOwnerList.length && utils.tabIs(tab, 'list')">
+  <ng-template [ngIf]="teamList.length && utils.tabIs(tab, 'list')">
 
     <!-- Teams listing -->
     <section class="list-group">
-      <a *ngFor="let owner of fs.orderByDate(filteredTeamOwners, 'teamname')" [routerLink]="['/teamOwner', teamOwner._id]" class="list-group-item list-group-item-action flex-column align-items-start">
+      <a *ngFor="let player of teamList" class="list-group-item list-group-item-action flex-column align-items-start">
         <div class="d-flex w-100 justify-content-between">
-          <h5 class="mb-1">{{owner.name}}</h5>
-          <small >{{owner.teamname | json}}</small>
+          <h5 class="mb-1">{{player | json}}</h5>
         </div>
       </a>
     </section>

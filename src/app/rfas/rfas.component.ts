@@ -36,8 +36,9 @@ pageTitle = 'Restricted Free Agents';
   error: boolean;
   query: string = '';
   modelDate: FormControl;
+  _editBid: boolean;
   
-  end_time: object = new Date("2019-08-28 07:00:00")
+  end_time: object = new Date("2020-09-06 23:59:59")
 
   constructor(
     private title: Title,
@@ -57,7 +58,7 @@ pageTitle = 'Restricted Free Agents';
     this.loading = true;
     // Get future, public events
     this.rfaListSub = this.api
-      .getData$('rfas')
+      .getRfasForYear$('rfas', (new Date()).getFullYear())
       .subscribe(
         res => {
           this.rfaList = res.map((rfa) => {return {rfa: rfa, error:'', bidAmt:0, success: '' }});
@@ -115,8 +116,11 @@ pageTitle = 'Restricted Free Agents';
    }
   
   private _handleSubmitSuccess(data) {
-    this.rfaList.find((listItem)=> {return listItem.rfa.rfa._id == data.rfa}).rfa.bids.push(data);
-    this.rfaList.find((listItem)=> {return listItem.rfa.rfa._id == data.rfa}).success = 'Success';
+    var this_rfa = this.rfaList.find((listItem)=> {return listItem.rfa.rfa._id == data.rfa})
+    this_rfa.rfa.bids.push(data);
+    this_rfa.success = 'Success';
+    this_rfa.bidAmt = this_rfa.bidAmt + 1;
+    
   }
   private _handleSubmitError(err) {
     this.rfaList.find((listItem)=> {return listItem.rfa.rfa._id == err.rfa}).error = 'Error: Please try again';

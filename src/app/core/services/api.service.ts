@@ -31,6 +31,17 @@ export class ApiService {
     )
   }
   
+  
+  getRfasForYear$(model: string, yr: number):Observable<any[]> {
+    return this.http
+      .get<any[]>(`${this.base_api}${model}/yr/${yr}`, {
+      headers: new HttpHeaders().set('Authorization', this._authHeader)
+    })
+    .pipe(
+      catchError((error) => this._handleError(error)) 
+    )
+  }
+  
   getDatabyId$(model: string, id: string): Observable<any> {
     return this.http
       .get<any>(`${this.base_api}${model}/${id}`, {

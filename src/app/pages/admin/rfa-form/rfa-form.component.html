@@ -13,25 +13,63 @@
         </mat-option>
       </mat-select>
     </mat-form-field>
-  </div>
-  <div>
     <mat-form-field>
+      <mat-label>Draft Year</mat-label>
+      <input matInput formControlName="draft_year" type="number">
+    </mat-form-field>
+  </div>
+  <div class="example-table-container" >
+<!--     <mat-form-field>
       <mat-label>Player</mat-label>
       <mat-select id="player" formControlName="player" [compareWith]="_compPlyr">
         <mat-option *ngFor="let plyr of filteredPlayers" [(value)]="plyr">
           {{plyr.fullName}}
         </mat-option>
       </mat-select>
-    </mat-form-field>
+    </mat-form-field> -->
+
+    <mat-table [dataSource]="filteredPlayers" class="mat-elevation-z8">
+      <ng-container matColumnDef="nominate">
+        <mat-header-cell *matHeaderCellDef> Player </mat-header-cell>
+        <mat-cell *matCellDef="let element">     
+          <button *ngIf="!dataForm.get('player').value || element.fullName != dataForm.get('player').value.fullName" mat-icon-button type="button"  color="primary" (click)="_setRFA(element)"><mat-icon>check_box_outline_blank</mat-icon></button>
+          <button *ngIf="dataForm.get('player').value && element.fullName == dataForm.get('player').value.fullName" mat-icon-button type="button"  color="primary" (click)="_unsetRFA(element)"><mat-icon>check_box</mat-icon></button>
+        </mat-cell>
+      </ng-container>
+      
+      
+      <!-- Position Column -->
+      <ng-container matColumnDef="fullName">
+        <mat-header-cell *matHeaderCellDef> Player </mat-header-cell>
+        <mat-cell *matCellDef="let element"> {{element.fullName}} </mat-cell>
+      </ng-container>
+
+      <!-- Name Column -->
+      <ng-container matColumnDef="ADV">
+        <mat-header-cell *matHeaderCellDef> ADV </mat-header-cell>
+        <mat-cell *matCellDef="let element"> {{element.auctionValueAverage | currency}} </mat-cell>
+      </ng-container>
+
+      <!-- Weight Column -->
+      <ng-container matColumnDef="ADP">
+        <mat-header-cell *matHeaderCellDef> ADP </mat-header-cell>
+        <mat-cell *matCellDef="let element"> {{element.averageDraftPosition | number: '1.2-2'}} </mat-cell>
+      </ng-container>
+
+      <mat-header-row *matHeaderRowDef="['nominate', 'fullName', 'ADV', 'ADP']; sticky: true"></mat-header-row>
+      <mat-row *matRowDef="let row; columns: ['nominate', 'fullName', 'ADV', 'ADP'];" [ngClass]="{'make-gold': dataForm.get('player').value && row.fullName == dataForm.get('player').value.fullName }"></mat-row>
+    </mat-table>
+
   </div>
  
 
+  
   <!-- Submit -->
   <div class="form-group">
     <button
       type="submit"
       class="btn btn-primary"
-      [attr.disabled]="dataForm.invalid || submitting ? true : null || !_dataEntryAllowed()"
+     
       [innerText]="submitBtnText"></button>
       <!-- https://github.com/angular/angular/issues/11271#issuecomment-289806196 -->
     <app-submitting *ngIf="submitting"></app-submitting>

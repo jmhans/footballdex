@@ -13,38 +13,40 @@
 
             <div class="container">
               <div class="row">
-                <div class="col-8">
+                <div class="col-6">
                   <a [routerLink]="['/rfa', rfa.rfa.rfa._id]" *ngIf="rfa">
                     <strong >
                       {{rfa.rfa.rfa.name }}
                     </strong> 
                   </a>
-                  <small class="d-none d-md-block">({{rfa.rfa.rfa.owner.teamname}})</small>
+                  <small class="d-none d-md-inline">({{rfa.rfa.rfa.owner.teamname}})</small>
+                  
                 </div>
-                <div class="col-4">
-                   Current bid: <span class="badge badge-primary badge-pill">{{_bidSummary(rfa.rfa.bids).maxBid}} </span>
+                <div class="col-6">
+                   Highest bid: <span>{{_bidSummary(rfa.rfa.bids).maxBid}} </span>
+                   <small class="d-none d-md-inline"><span> (Bid Count: {{_bidSummary(rfa.rfa.bids).bidCt}})</span></small>  
                 </div>
               </div>
               <div class="row">
-                <div class="col-2 d-none d-md-block">
-                  <small><span>RFA Reserve: {{rfa.rfa.rfa.adv * .8 | number : '1.0-0'}}</span></small>
+                <div class="col-6 d-none d-md-block">
+                    <small class="d-none d-md-inline"><span> ESPN ADV: {{rfa.rfa.rfa.adv | number: '1.0-0'}}</span></small>  
+                    <small class="d-md-inline"><span> (RFA Reserve: {{rfa.rfa.rfa.adv * .8 | number : '1.0-0'}})</span></small>
+                   
                 </div>
-                <div class="col-2 d-none d-sm-block">
-                  <small><span>ESPN ADV: {{rfa.rfa.rfa.adv | number: '1.0-0'}}</span></small>
-                </div>
-                <div class="col-2 d-none d-sm-block">
-                  <small><span>Bid Count:{{_bidSummary(rfa.rfa.bids).bidCt}}</span></small>
-                </div>
-                <div *ngIf="auth.loggedIn" class="col-4 ">
-                  <mat-form-field class="example-form-field">
-                    <input matInput type="number" placeholder="Bid amount" [(ngModel)]="rfa.bidAmt">
-
+                <div *ngIf="auth.loggedIn" class="col d-md-block">
+                  
+                  <button class="col-4 " *ngIf="auth.loggedIn && _bidsAllowed()" type="button" mat-stroked-button color="primary" (click)="_placeBid(rfa.rfa.rfa, rfa.bidAmt)">Bid {{rfa.bidAmt}}</button>   
+                  
+                  <button *ngIf="!_editBid" type="button" mat-icon-button color="primary" (click)="_editBid = !_editBid">
+                    <mat-icon>edit</mat-icon> Edit Amount
+                  </button>
+                  <mat-form-field *ngIf="_editBid" class="rfa-bid-field col-8 ">
+                    <input matInput type="text" pattern="[0-9]*" placeholder="Next Bid" [(ngModel)]="rfa.bidAmt">
                   </mat-form-field>
-
+                  <button *ngIf="_editBid" type="button" mat-icon-button color="primary" (click)="_editBid = !_editBid">
+                    <mat-icon>save</mat-icon>
+                  </button>
                 </div>
-                <button *ngIf="auth.loggedIn && _bidsAllowed()" class="col-2" mat-button (click)="_placeBid(rfa.rfa.rfa, rfa.bidAmt)">
-                  Bid<mat-icon>input</mat-icon>
-                </button>
                
               </div>
              

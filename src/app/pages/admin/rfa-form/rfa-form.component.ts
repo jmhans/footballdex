@@ -17,7 +17,7 @@ import { Router } from '@angular/router';
 })
 export class RfaFormComponent implements OnInit, OnDestroy {
 
- @Input() rfa: RFAModel;
+  rfa: RFAModel;
   rfa_data: any[];
   owners: TeamOwnerModel[];
   ownersListSub: Subscription;
@@ -39,7 +39,7 @@ export class RfaFormComponent implements OnInit, OnDestroy {
   submitting: boolean;
   submitBtnText: string;
   loading: boolean;
-  entryDeadline: object = new Date("2019-08-26 11:59:59")
+  entryDeadline: object = new Date("2020-08-31 11:59:59")
   
   
   // Set up errors object
@@ -70,7 +70,7 @@ export class RfaFormComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.formErrors = this.formErrors;
     this.isEdit = !!this.rfa;
-    this.submitBtnText = this.isEdit ? 'Update Data' : 'Create Data';
+    this.submitBtnText = this.isEdit ? 'Update RFA' : 'Submit RFA';
     // Set initial form data
     this.formObj = this._setFormObj();
     // Use FormBuilder to construct the form
@@ -84,22 +84,25 @@ export class RfaFormComponent implements OnInit, OnDestroy {
     if (!this.isEdit) {
       // If creating a new Golfer, create new
       // FormGolferModel with default null data
-      return new FormRFAModel(null, null, null);
+      return new FormRFAModel(null, null,  (new Date()).getFullYear(), null);
     } else {
       return new FormRFAModel(
         this.rfa.owner,
         this.rfa.name, 
+        this.rfa.draft_year,
         this.rfa.adv
       );
     }
   }
+
+  
   
 private _getTeamOwnersList() {
 
     this.loading = true;
     // Get future, public events
     this.ownersListSub = this.api
-      .getData$('teamOwners')
+      .getData$('teamrfas')
       .subscribe(
         res => {
           this.owners = res;
@@ -132,6 +135,7 @@ private _getTeamOwnersList() {
       player: [(this.formObj.name == null? null : this.rfa_data.find((plyr) => {return plyr.fullName == this.formObj.name})),
         Validators.required
       ], 
+      draft_year: [this.formObj.draft_year],
       adv: [this.formObj.adv]
     });
     
@@ -196,7 +200,8 @@ private _getTeamOwnersList() {
     return new RFAModel(
       this.dataForm.get('owner').value._id, // Need to think about these - probably need to extract _id from these differently.  
       this.dataForm.get('player').value.fullName,
-      this.dataForm.get('player').value.ADV,
+      this.dataForm.get('draft_year').value,
+      this.dataForm.get('player').value.auctionValueAverage,
       this.auth.userProfile.name, 
       this.rfa ? this.rfa._id : null
     );
@@ -206,7 +211,7 @@ private _getTeamOwnersList() {
     this.submitting = true;
     this.submitObj = this._getSubmitObj();
 
-    if (!this.isEdit) {
+    if (!this.submitObj._id) {
       this.submitSub = this.api
         .postData$('rfas', this.submitObj)
         .subscribe(
@@ -215,7 +220,7 @@ private _getTeamOwnersList() {
         );
     } else {
       this.submitSub = this.api
-        .editData$('rfas', this.rfa._id, this.submitObj)
+        .editData$('rfas', this.submitObj._id, this.submitObj)
         .subscribe(
           data => this._handleSubmitSuccess(data),
           err => this._handleSubmitError(err)
@@ -223,18 +228,34 @@ private _getTeamOwnersList() {
     }
   }
   
+  
   private _getFilteredPlayers(new_owner) {
     if (new_owner) {
-      return this.rfa_data.filter((plyr) => {return (plyr.TeamId == new_owner.espn_team_id)});
+      var plyrList =  this.rfa_data.filter((plyr) => {return (plyr.TeamId == new_owner.espn_team_id)});
+        plyrList.forEach((p)=>{
+          var ownerRFA = new_owner.rfas.find((rfa)=>{return rfa.name == p.fullName}) 
+          if (ownerRFA) {
+            this.dataForm.get('player').setValue(p,{emitEvent:false})
+            this.rfa = ownerRFA;
+          }
+        })               
+      return plyrList;
       } else return [];
   }
  
+  _setRFA(el) {
+      this.dataForm.get('player').setValue(el,{emitEvent:false});      
+  }
+  _unsetRFA(el) {
+      this.dataForm.get('player').setValue(null,{emitEvent:false});      
+  }
+  
 
   private _handleSubmitSuccess(res) {
     this.error = false;
     this.submitting = false;
     // Redirect to Golfer detail
-    this.router.navigate(['/admin']);
+    this.router.navigate(['/']);
   }
 
   private _handleSubmitError(err) {

@@ -9,6 +9,8 @@ import { Subscription } from 'rxjs';
 import { TeamOwnerModel } from './../../core/models/teamOwners.model';
 import { ActivatedRoute } from '@angular/router';
 
+
+
 @Component({
   selector: 'app-admin',
   templateUrl: './admin.component.html',
@@ -18,6 +20,8 @@ export class AdminComponent implements OnInit, OnDestroy {
   pageTitle = 'Admin';
   teamOwnersSub: Subscription;
   teamOwnerList: TeamOwnerModel[];
+  teamList: any[];
+  teamsSub: Subscription;
   filteredTeamOwners: TeamOwnerModel[];
   loading: boolean;
   error: boolean;
@@ -36,13 +40,13 @@ export class AdminComponent implements OnInit, OnDestroy {
     private api: ApiService,
     public utils: UtilsService,
     public fs: FilterSortService,
-    private route: ActivatedRoute,
+    private route: ActivatedRoute
   ) { }
 
   ngOnInit() {
-   
+    
     this.title.setTitle(this.pageTitle);
-    this._getTeamOwnerList();
+    this._getTeamsForOwner();
     this.loggedInSub = this.auth.loggedIn$.subscribe(
       loggedIn => {
         this.loading = true;
@@ -65,15 +69,15 @@ export class AdminComponent implements OnInit, OnDestroy {
   
   
 
-  private _getTeamOwnerList() {
+  private _getTeamsForOwner() {
     this.loading = true;
     // Get all (admin) events
-    this.teamOwnersSub = this.api
-      .getData$('teamOwners')
+    
+    this.teamsSub = this.api
+      .getData$('teamowners')
       .subscribe(
         res => {
-          this.teamOwnerList = res;
-          this.filteredTeamOwners = res;
+          this.teamList = res;
           this.loading = false;
         },
         err => {
@@ -84,17 +88,8 @@ export class AdminComponent implements OnInit, OnDestroy {
       );
   }
 
-  searchTeamOwners() {
-    this.filteredTeamOwners = this.fs.search(this.teamOwnerList, this.query, '_id', 'mediumDate');
-  }
-
-  resetQuery() {
-    this.query = '';
-    this.filteredTeamOwners = this.teamOwnerList;
-  }
-
   ngOnDestroy() {
-    this.teamOwnersSub.unsubscribe();
+    this.teamsSub.unsubscribe();
   }
 
 }

@@ -7,7 +7,9 @@ const rfaSchema = new Schema({
            },
     name: {type: String, required: false},
     adv: {type: Number}, 
-    created_by: {type: String, required: false}
+    created_by: {type: String, required: false},
+    draft_year: {type: Number, required: false}
+  
 })
 
 const teamOwnerSchema = new Schema({

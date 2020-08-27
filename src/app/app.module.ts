@@ -53,6 +53,8 @@ import { EditRfaComponent } from './pages/admin/edit-rfa/edit-rfa.component';
 import { BidHistoryComponent } from './pages/bid-history/bid-history.component';
 
 
+
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -100,7 +102,6 @@ import { BidHistoryComponent } from './pages/bid-history/bid-history.component';
     MatIconModule,
     MatExpansionModule,
     MatCardModule
-    
   ],
   providers: [
     Title, 

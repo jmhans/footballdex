@@ -3,6 +3,7 @@ class RFAModel {
     constructor(
     public owner: any,
     public name: string,
+    public draft_year: number,
     public adv?: number,
     public created_by?: string,
     public _id?: string
@@ -20,6 +21,7 @@ class FormRFAModel {
   constructor(
     public owner: any,
     public name: string,
+    public draft_year: number,
     public adv?: number,
   ) { }
 }

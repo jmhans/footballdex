@@ -26,6 +26,8 @@ class RFAController extends BaseController {
     if (err) return next(err);
     res.json(post);
   });
+    
+    
 }
 _get(req, res, next) {
   
@@ -38,8 +40,11 @@ _get(req, res, next) {
       })
       
     }
-  
-  this.model.find().populate('owner').exec(function(err, results) {
+    var qry = {}
+  if(req.params.draftyear) {
+    qry.draft_year  = req.params.draftyear
+  }
+  this.model.find(qry).populate('owner').exec(function(err, results) {
     if (err) return next(err);
 
     Promise.all(results.map((rfa)=> {
@@ -72,7 +77,7 @@ _getOneWithBids(req, res, next) {
 _create(req, res, next) {
   const model = this.model
   //this.model.find({owner: req.body.owner})
-  this.model.find({owner: req.body.owner}).exec(function(err, doc) {
+  this.model.find({owner: req.body.owner, draft_year: req.body.draft_year}).exec(function(err, doc) {
     if (err) {
       res.status(400).send(err);
     }
@@ -86,8 +91,7 @@ _create(req, res, next) {
     }
 
   })
-}
-  
+}  
   
   route() {
     router.get('/' + this.routeString, (...args) => this._get(...args));
@@ -95,6 +99,7 @@ _create(req, res, next) {
     router.get('/' + this.routeString + '/:id', (...args) => this._getOneWithBids(...args));
     router.put('/' + this.routeString + '/:id', (...args) => this._update(...args));
     router.delete('/' + this.routeString + '/:id', (...args) => this._delete(...args));
+    router.get('/' + this.routeString + '/yr/:draftyear', (...args) => this._get(...args));
     return router;
   }
   
@@ -105,6 +110,29 @@ class TeamOwnerController extends BaseController {
 
   constructor() {
     super(teamOwner, 'teamowners');
+  }
+  
+    _getTeamsWithRFAs(req, res, next) {
+  
+    this.model.aggregate([
+      {"$lookup": {"from": 'rfas',"let": {"ownerId": "$_id", "yr": (new Date()).getFullYear()}, "pipeline":[ {"$match": {"$expr": {"$and": [ {"$eq": ["$draft_year","$$yr"]}, {"$eq": ["$owner", "$$ownerId"]}]}}}], "as": 'rfas'}}
+       ]).exec((err, tms) => {
+      if (err) return next(err);
+      res.json(tms);
+    })
+    
+  }
+  
+    
+route() {
+    router.get('/' + this.routeString, (...args) => this._get(...args));
+    router.post('/' + this.routeString , (...args) => this._create(...args));
+    router.get('/' + this.routeString + '/:id', (...args) => this._getOne(...args));
+    router.get('/' + this.routeString + '/:id', (...args) => this._getOne(...args));
+    router.put('/' + this.routeString + '/:id', (...args) => this._update(...args));
+    router.delete('/' + this.routeString + '/:id', (...args) => this._delete(...args));
+    router.get('/teamrfas', (...args) => this._getTeamsWithRFAs(...args));
+    return router;
   }
 }
 
@@ -120,8 +148,15 @@ class BidController extends BaseController {
       if (err) return next(err);
       res.json(bids);
     })
+    
   
   }
+  
+
+  
+
+  
+  
   
 route() {
     router.get('/' + this.routeString, (...args) => this._get(...args));
@@ -130,6 +165,7 @@ route() {
     router.get('/' + this.routeString + '/:id', (...args) => this._getOne(...args));
     router.put('/' + this.routeString + '/:id', (...args) => this._update(...args));
     router.delete('/' + this.routeString + '/:id', (...args) => this._delete(...args));
+    router.get('/teamrfas', (...args) => this._getTeamsWIthRFAs(...args));
     router.get('/userbids/:email', (...args) => this._getBidsForEmail(...args));
     return router;
   }
