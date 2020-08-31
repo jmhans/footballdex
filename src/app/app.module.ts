@@ -18,6 +18,8 @@ import {MatButtonModule} from '@angular/material/button';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import {MatExpansionModule} from '@angular/material/expansion';
 import {MatCardModule} from '@angular/material/card';
+import {MatSlideToggleModule} from '@angular/material/slide-toggle';
+
 
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
@@ -101,7 +103,8 @@ import { BidHistoryComponent } from './pages/bid-history/bid-history.component';
     FlexLayoutModule,
     MatIconModule,
     MatExpansionModule,
-    MatCardModule
+    MatCardModule, 
+    MatSlideToggleModule
   ],
   providers: [
     Title, 

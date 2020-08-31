@@ -31,7 +31,8 @@ export class RfaFormComponent implements OnInit, OnDestroy {
   // Model storing initial form values
   formObj: FormRFAModel;
   // Form validation and disabled logic
-
+  admin_mode: boolean = false; 
+  
   formChangeSub: Subscription;
   // Form submission
   submitObj: RFAModel;
@@ -273,7 +274,7 @@ private _getTeamOwnersList() {
     console.log(this.config.nominate_end_time);
     console.log(new Date() < this.config.nominate_end_time);
     
-    return (new Date() < this.config.nominate_end_time);
+    return (new Date() < this.config.nominate_end_time || this.admin_mode);
   }
   
   

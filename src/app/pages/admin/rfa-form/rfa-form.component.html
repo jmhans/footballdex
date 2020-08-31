@@ -1,6 +1,15 @@
 <!-- src/app/pages/admin/game-form/game-form.component.html -->
     <p *ngIf="!_dataEntryAllowed()" class="mt-3 alert alert-danger">
       <strong>Error:</strong> It is past the submission deadline. Please contact the commissioner if you believe this is an error.
+      <mat-slide-toggle
+          *ngIf="auth._checkAdmin(auth.userProfile)"
+          class="example-margin"
+          color="primary"
+          [(ngModel)]="admin_mode"
+          >
+        Admin Mode
+      </mat-slide-toggle>
+
     </p>
 <form [formGroup]="dataForm" (ngSubmit)="onSubmit()" *ngIf="utils.isLoaded(loading) && _dataEntryAllowed()">
   
