@@ -37,7 +37,7 @@
                   
                   <button class="col-4 " *ngIf="auth.loggedIn && _bidsAllowed()" type="button" mat-stroked-button color="primary" (click)="_placeBid(rfa.rfa.rfa, rfa.bidAmt)">Bid {{rfa.bidAmt}}</button>   
                   
-                  <button *ngIf="!_editBid" type="button" mat-icon-button color="primary" (click)="_editBid = !_editBid">
+                  <button *ngIf="!_editBid" type="button" mat-icon-button color="primary" (click)="_editBid = !_editBid" style="width: auto !important;">
                     <mat-icon>edit</mat-icon> Edit Amount
                   </button>
                   <mat-form-field *ngIf="_editBid" class="rfa-bid-field col-8 ">

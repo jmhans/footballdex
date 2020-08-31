@@ -79,6 +79,8 @@ export class RfaFormComponent implements OnInit, OnDestroy {
     this.rfa_data = rfa_data.data;
     this._getTeamOwnersList();
     this._buildForm();
+    console.log(this.config.bid_end_time);
+    console.log(this.config.nominate_end_time);
   }
 
   
@@ -267,6 +269,10 @@ private _getTeamOwnersList() {
   }
 
   _dataEntryAllowed() {
+    console.log(new Date());
+    console.log(this.config.nominate_end_time);
+    console.log(new Date() < this.config.nominate_end_time);
+    
     return (new Date() < this.config.nominate_end_time);
   }
   

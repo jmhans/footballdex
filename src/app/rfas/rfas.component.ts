@@ -66,7 +66,7 @@ pageTitle = 'Restricted Free Agents';
           this.rfaList = res.map((rfa) => {return {rfa: rfa, error:'', bidAmt:0, success: '' }});
          // this.filteredRFAs = res;
           this.rfaList.forEach((rfa) => {
-            rfa.bidAmt = this._bidSummary(rfa.rfa.bids).maxBid + 1
+            rfa.bidAmt = parseInt(this._bidSummary(rfa.rfa.bids).maxBid) + 1
           });
 
           this.loading = false;
